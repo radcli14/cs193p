@@ -20,8 +20,8 @@ struct MemoryGame<CardContent> {
         }
     }
     
-    func choose(_ card: Card) {
-        
+    mutating func choose(_ index: Int) {
+        cards[index].isFaceUp.toggle()
     }
     
     mutating func shuffle() {
