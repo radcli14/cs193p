@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  EmojiMemoryGameView.swift
 //  Memorize
 //
 //  Created by Eliott Radcliffe on 1/10/24.
@@ -39,7 +39,9 @@ enum CardTheme: CaseIterable {
 }
 
 
-struct ContentView: View {
+struct EmojiMemoryGameView: View {
+    var viewModel: EmojiMemoryGame
+    
     @State var theme: CardTheme = .halloween
     var emojis: [String] {
         return theme.emojis + theme.emojis
@@ -110,5 +112,5 @@ struct CardView: View {
 }
 
 #Preview {
-    ContentView()
+    EmojiMemoryGameView()
 }
