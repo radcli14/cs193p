@@ -36,4 +36,8 @@ class EmojiMemoryGame: ObservableObject {
     func choose(_ card: MemoryGame<String>.Card) {
         model.choose(card)
     }
+    
+    func changeTheme(to theme: CardTheme) {
+        
+    }
 }

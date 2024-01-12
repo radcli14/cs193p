@@ -7,45 +7,8 @@
 
 import SwiftUI
 
-enum CardTheme: CaseIterable {
-    case halloween
-    case hands
-    case sports
-    
-    var name: String {
-        switch self {
-        case .halloween: "Halloween"
-        case .hands: "Hands"
-        case .sports: "Sports"
-        }
-    }
-    
-    var icon: String {
-        switch self {
-        case .halloween: "person.2"
-        case .hands: "hand.raised"
-        case .sports: "soccerball"
-        }
-    }
-    
-    var emojis: [String] {
-        switch self {
-        case .halloween: ["👻", "🎃", "🕷️", "👺", "🏴‍☠️", "🧌", "👽", "💀", "🧞", "🤖"]
-        case .hands: ["🫶🏿", "👐🏽", "🫱🏻‍🫲🏽", "✌️", "🖖🏻", "🖕🏾", "🤌", "🤙🏼", "🤜🏿", "👉🏽"]
-        case .sports: ["⚽️", "🏀", "🏈", "⚾️", "🥌", "🎱", "🏓", "🏒", "⛳️", "🥊"]
-        }
-        
-    }
-}
-
-
 struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGame
-    
-    /*@State var theme: CardTheme = .halloween
-    var emojis: [String] {
-        return theme.emojis + theme.emojis
-    }*/
     
     var body: some View {
         VStack {
@@ -55,10 +18,9 @@ struct EmojiMemoryGameView: View {
                 cards
             }
             Spacer()
-            Button("Shuffle") {
-                viewModel.shuffle()
-            }
-            //themeButtons
+            themeButtons
+            Divider()
+            shuffleButton
         }
         .padding()
     }
@@ -74,18 +36,17 @@ struct EmojiMemoryGameView: View {
         .foregroundColor(.green)
     }
     
-    /*
     var themeButtons: some View {
         HStack(alignment: .bottom) {
-            ForEach(CardTheme.allCases, id: \.self) { buttonTheme in
+            ForEach(CardTheme.allCases, id: \.self) { theme in
                 Button(action: {
-                    theme = buttonTheme
+                    viewModel.changeTheme(to: theme)
                 }) {
                     VStack {
-                        Image(systemName: buttonTheme.icon)
+                        Image(systemName: theme.icon)
                             .imageScale(.large)
                             .font(.title)
-                        Text(buttonTheme.name)
+                        Text(theme.name)
                             .font(.callout)
                     }
                     .frame(width: 96)
@@ -93,7 +54,13 @@ struct EmojiMemoryGameView: View {
             }
         }
     }
-     */
+    
+    var shuffleButton: some View {
+        Button("Shuffle") {
+            viewModel.shuffle()
+        }
+        .font(.headline)
+    }
 }
 
 struct CardView: View {
