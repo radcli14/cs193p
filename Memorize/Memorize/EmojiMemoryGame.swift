@@ -41,8 +41,8 @@ class EmojiMemoryGame: ObservableObject {
         model.shuffle()
     }
     
-    func choose(_ index: Int) {
-        model.choose(index)
+    func choose(_ card: MemoryGame<String>.Card) {
+        model.choose(card)
     }
     
     func changeTheme(to theme: EmojiTheme) {
