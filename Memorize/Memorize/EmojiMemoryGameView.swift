@@ -70,11 +70,9 @@ struct EmojiMemoryGameView: View {
 
 struct CardView: View {
     let card: MemoryGame<String>.Card
-    //let onTapGesture: () -> Void
-    
-    init(_ card: MemoryGame<String>.Card) { //}, onTapGesture: @escaping () -> Void) {
+
+    init(_ card: MemoryGame<String>.Card) {
         self.card = card
-        //self.onTapGesture = onTapGesture
     }
     
     var body: some View {
@@ -91,6 +89,7 @@ struct CardView: View {
             .opacity(card.isFaceUp ? 1 : 0)
             base.fill().opacity(card.isFaceUp ? 0 : 1)
         }
+        .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
     }
 }
 
