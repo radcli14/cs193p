@@ -10,6 +10,6 @@ A few of the important concepts that I learned in this segment of the course:
 - Using `protocol` to define structs that have specific properties, then binding variable types to a protocol
 - Usage of `static` variables and functions, which are type functions that exist prior to initialization, don't depend on non-static variables, and are constant
 
-| Programming Assignment 1 | Post Lecture 4                 |
-|--------------------------|--------------------------------|
-| ![PE1](images/pa1.png)   | ![L4](images/postLecture4.png) |
+| Programming Assignment 1 | Post Lecture 4                 | Programming Assignment 2 |
+|--------------------------|--------------------------------|--------------------------|
+| ![PA1](images/pa1.png)   | ![L4](images/postLecture4.png) | ![PA2](images/pa2.png)   | 
