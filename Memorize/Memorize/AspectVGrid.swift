@@ -54,6 +54,18 @@ struct AspectVGrid<Item: Identifiable, ItemView: View>: View  {
     }
 }
 
-/*#Preview {
-    AspectVGrid()
-}*/
+#Preview {
+    AspectVGrid(
+        FlagTheme().emojis.map { emoji in
+            MemoryGame<String>.Card(
+                isFaceUp: true,
+                content: emoji,
+                id: emoji
+            )
+        },
+        aspectRatio: 2
+    ) { card in
+        CardView(card)
+            .padding(4)
+    }
+}
