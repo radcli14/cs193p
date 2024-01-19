@@ -10,6 +10,8 @@ import SwiftUI
 struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGame
     
+    private let aspectRatio: CGFloat = 2/3
+    
     var body: some View {
         VStack {
             Text(viewModel.themeName)
@@ -19,33 +21,28 @@ struct EmojiMemoryGameView: View {
             Button("New Game") {
                 viewModel.startNewGame()
             }
-            ScrollView {
-                cards
-            }
+            cards
             Spacer()
-            //themeButtons
-            //Divider()
-            //shuffleButton
+            themeButtons
+            Divider()
+            shuffleButton
         }
         .padding()
         .animation(.default, value: viewModel.cards)
     }
     
-    var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 85), spacing: 0)], spacing: 0) {
-            ForEach(viewModel.cards) { card in
-                CardView(card)
-                    .onTapGesture{
-                        viewModel.choose(card)
-                    }
-                .aspectRatio(2/3, contentMode: .fit)
+    private var cards: some View {
+        AspectVGrid(viewModel.cards, aspectRatio: aspectRatio) { card in
+            CardView(card)
                 .padding(4)
-            }
+                .onTapGesture{
+                    viewModel.choose(card)
+                }
         }
         .foregroundColor(viewModel.themeColor)
     }
     
-    var themeButtons: some View {
+    private var themeButtons: some View {
         HStack(alignment: .bottom) {
             ForEach(viewModel.themes.indices, id: \.self) { index in
                 let theme = viewModel.themes[index]
@@ -55,17 +52,17 @@ struct EmojiMemoryGameView: View {
                     VStack {
                         Image(systemName: theme.icon)
                             .imageScale(.large)
-                            .font(.title)
+                            .font(.body)
                         Text(theme.name)
-                            .font(.callout)
+                            .font(.caption2)
                     }
-                    .frame(width: 96)
+                    .frame(width: 56)
                 }
             }
         }
     }
     
-    var shuffleButton: some View {
+    private var shuffleButton: some View {
         Button("Shuffle") {
             viewModel.shuffle()
         }
