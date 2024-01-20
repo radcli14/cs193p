@@ -11,7 +11,8 @@ A few of the important concepts that I learned in this segment of the course:
 - Using `protocol` to define structs that have specific properties, then binding variable types to a protocol
 - Usage of `static` variables and functions, which are type functions that exist prior to initialization, don't depend on non-static variables, and are constant
 - Varying associated data with different cases of enums
+- That the `@ViewBuilder` annotation is necessary when a `func` or `var` generates a list of views, but not if you encapsulate a single view
 
-| Programming Assignment 1 | Post Lecture 4                 | Programming Assignment 2 |
-|--------------------------|--------------------------------|--------------------------|
-| ![PA1](images/pa1.png)   | ![L4](images/postLecture4.png) | ![PA2](images/pa2.png)   | 
+| Programming Assignment 1 | Post Lecture 4                 | Programming Assignment 2 | Post Lecture 6                 |
+|--------------------------|--------------------------------|--------------------------|--------------------------------|
+| ![PA1](images/pa1.png)   | ![L4](images/postLecture4.png) | ![PA2](images/pa2.png)   | ![L6](images/postLecture6.png) |
