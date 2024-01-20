@@ -52,10 +52,11 @@ struct EmojiMemoryGameView: View {
                     VStack {
                         Image(systemName: theme.icon)
                             .imageScale(.large)
-                            .font(.body)
+                            .font(viewModel.isSelected(theme) ? .title : .body)
                         Text(theme.name)
                             .font(.caption2)
                     }
+                    .foregroundColor(viewModel.isSelected(theme) ? .green : .blue)
                     .frame(width: 56)
                 }
             }

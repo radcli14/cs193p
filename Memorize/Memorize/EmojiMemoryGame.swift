@@ -61,6 +61,10 @@ class EmojiMemoryGame: ObservableObject {
         }
     }
     
+    func isSelected(_ themeToCheck: EmojiTheme) -> Bool {
+        return theme.name == themeToCheck.name
+    }
+    
     // MARK: - Intents
     
     func startNewGame() {
