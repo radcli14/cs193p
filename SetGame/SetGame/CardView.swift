@@ -10,18 +10,24 @@ import SwiftUI
 struct CardView: View {
     let card: SetGame.Card
     
+    init(_ card: SetGame.Card) {
+        self.card = card
+    }
+    
     var body: some View {
-        Text(card.id)
+        VStack {
+            Text(String(describing: card.condition1))
+            Text(String(describing: card.condition2))
+            Text(String(describing: card.condition3))
+            Text(String(describing: card.condition4))
+        }
+        .padding(12)
+        .background {
+            RoundedRectangle(cornerRadius: 12).foregroundColor(.pink)
+        }
     }
 }
 
 #Preview {
-    CardView(
-        card: SetGame.Card(
-            condition1: .one,
-            condition2: .two,
-            condition3: .three,
-            condition4: .one
-        )
-    )
+    CardView(ShapeSetGame().cards.first!)
 }

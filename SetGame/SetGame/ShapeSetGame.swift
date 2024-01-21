@@ -13,4 +13,8 @@ class ShapeSetGame: ObservableObject {
     private static func createSetGame() -> SetGame {
         return SetGame()
     }
+    
+    var cards: Array<SetGame.Card> {
+        return model.cards
+    }
 }
