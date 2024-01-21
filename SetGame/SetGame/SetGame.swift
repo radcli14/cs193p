@@ -7,23 +7,17 @@
 
 import Foundation
 
-enum CardCondition: CaseIterable {
-    case one
-    case two
-    case three
-}
-
 struct SetGame {
     let cards = createCards()
     
     static private func createCards(shuffled: Bool = true) -> [Card] {
         var cards: [Card] = []
-        for condition1 in CardCondition.allCases {
-            for condition2 in CardCondition.allCases {
-                for condition3 in CardCondition.allCases {
-                    for condition4 in CardCondition.allCases  {
+        for number in NumberOfShapes.allCases {
+            for type in TypeOfShape.allCases {
+                for shading in Shading.allCases {
+                    for color in ShapeColor.allCases  {
                         cards.append(
-                            Card(condition1, condition2, condition3, condition4)
+                            Card(number, type, shading, color)
                         )
                     }
                 }
@@ -33,20 +27,20 @@ struct SetGame {
     }
     
     struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
-        let condition1: CardCondition
-        let condition2: CardCondition
-        let condition3: CardCondition
-        let condition4: CardCondition
+        let number: NumberOfShapes
+        let typeOfShape: TypeOfShape
+        let shading: Shading
+        let color: ShapeColor
         
-        init(_ condition1: CardCondition, _ condition2: CardCondition, _ condition3: CardCondition, _ condition4: CardCondition) {
-            self.condition1 = condition1
-            self.condition2 = condition2
-            self.condition3 = condition3
-            self.condition4 = condition4
+        init(_ number: NumberOfShapes, _ typeOfShape: TypeOfShape, _ shading: Shading, _ color: ShapeColor) {
+            self.number = number
+            self.typeOfShape = typeOfShape
+            self.shading = shading
+            self.color = color
         }
         
         var id: String {
-            return "[\(condition1)-\(condition2)-\(condition3)-\(condition4)]"
+            return "[\(number)-\(typeOfShape)-\(shading)-\(color)]"
         }
         
         var debugDescription: String {

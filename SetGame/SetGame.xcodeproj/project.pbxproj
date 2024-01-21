@@ -17,6 +17,7 @@
 		8A1D2CC52B5BEFF6006C8922 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1D2CC42B5BEFF6006C8922 /* SetGame.swift */; };
 		8A1D2CC72B5BF084006C8922 /* ShapeSetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1D2CC62B5BF084006C8922 /* ShapeSetGame.swift */; };
 		8A1D2CC92B5BF34F006C8922 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1D2CC82B5BF34F006C8922 /* CardView.swift */; };
+		8A1D2CCB2B5D4BC1006C8922 /* CardCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1D2CCA2B5D4BC1006C8922 /* CardCondition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		8A1D2CC42B5BEFF6006C8922 /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
 		8A1D2CC62B5BF084006C8922 /* ShapeSetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeSetGame.swift; sourceTree = "<group>"; };
 		8A1D2CC82B5BF34F006C8922 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		8A1D2CCA2B5D4BC1006C8922 /* CardCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCondition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				8A1D2C9A2B5BEBC0006C8922 /* SetGameApp.swift */,
 				8A1D2C9C2B5BEBC0006C8922 /* ShapeSetGameView.swift */,
 				8A1D2CC82B5BF34F006C8922 /* CardView.swift */,
+				8A1D2CCA2B5D4BC1006C8922 /* CardCondition.swift */,
 				8A1D2CC42B5BEFF6006C8922 /* SetGame.swift */,
 				8A1D2CC62B5BF084006C8922 /* ShapeSetGame.swift */,
 				8A1D2C9E2B5BEBC2006C8922 /* Assets.xcassets */,
@@ -271,6 +274,7 @@
 				8A1D2CC52B5BEFF6006C8922 /* SetGame.swift in Sources */,
 				8A1D2C9B2B5BEBC0006C8922 /* SetGameApp.swift in Sources */,
 				8A1D2CC92B5BF34F006C8922 /* CardView.swift in Sources */,
+				8A1D2CCB2B5D4BC1006C8922 /* CardCondition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

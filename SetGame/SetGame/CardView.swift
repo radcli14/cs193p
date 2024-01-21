@@ -16,10 +16,10 @@ struct CardView: View {
     
     var body: some View {
         VStack {
-            Text(String(describing: card.condition1))
-            Text(String(describing: card.condition2))
-            Text(String(describing: card.condition3))
-            Text(String(describing: card.condition4))
+            Text(String(describing: card.number))
+            Text(String(describing: card.typeOfShape))
+            Text(String(describing: card.shading))
+            Text(String(describing: card.color))
         }
         .padding(12)
         .background {
