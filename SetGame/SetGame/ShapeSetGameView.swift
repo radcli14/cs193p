@@ -13,7 +13,13 @@ struct ShapeSetGameView: View {
     var body: some View {
         VStack {
             Text("SET!").font(.largeTitle)
-            CardView(viewModel.cards.first!)
+            AspectVGrid(
+                viewModel.cards,
+                aspectRatio: 2/3
+            ) { card in
+                CardView(card)
+                    .padding(4)
+            }
         }
         .padding()
     }

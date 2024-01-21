@@ -57,7 +57,7 @@ struct AspectVGrid<Item: Identifiable, ItemView: View>: View  {
 #Preview {
     AspectVGrid(
         ShapeSetGame().cards,
-        aspectRatio: 3
+        aspectRatio: 2/3
     ) { card in
         CardView(card)
             .padding(4)

@@ -15,15 +15,35 @@ struct CardView: View {
     }
     
     var body: some View {
-        VStack {
-            Text(String(describing: card.number))
-            Text(String(describing: card.typeOfShape))
-            Text(String(describing: card.shading))
-            Text(String(describing: card.color))
+        ZStack {
+            RoundedRectangle(cornerRadius: 12)
+                .foregroundColor(.gray)
+            VStack {
+                ForEach(0..<card.n, id: \.self) { _ in
+                    shape
+                        .foregroundColor(color)
+                        .aspectRatio(2, contentMode: .fit)
+                        //.padding(12)
+                }
+            }
+            //.padding(12)
         }
-        .padding(12)
-        .background {
-            RoundedRectangle(cornerRadius: 12).foregroundColor(.pink)
+    }
+    
+    @ViewBuilder
+    var shape: some View {
+        switch card.typeOfShape {
+        case .diamond: RoundedRectangle(cornerRadius: 12)
+        case .squiggle: Rectangle()
+        case .oval: Circle()
+        }
+    }
+    
+    var color: Color {
+        switch card.color {
+        case .red: Color.red
+        case .green: Color.green
+        case .purple: Color.purple
         }
     }
 }

@@ -39,8 +39,12 @@ struct SetGame {
             self.color = color
         }
         
+        var n: Int {
+            number == .one ? 1 : number == .two ? 2 : 3
+        }
+        
         var id: String {
-            return "[\(number)-\(typeOfShape)-\(shading)-\(color)]"
+            "[\(number)-\(typeOfShape)-\(shading)-\(color)]"
         }
         
         var debugDescription: String {
