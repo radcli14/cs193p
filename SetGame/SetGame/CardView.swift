@@ -35,7 +35,7 @@ struct CardView: View {
         switch card.typeOfShape {
         case .diamond: RoundedRectangle(cornerRadius: 12)
         case .squiggle: Rectangle()
-        case .oval: Circle()
+        case .oval: Capsule()
         }
     }
     

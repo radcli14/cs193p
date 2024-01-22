@@ -12,17 +12,17 @@ struct EmojiMemoryGameView: View {
     
     var body: some View {
         VStack {
-            Text(viewModel.themeName)
+            /*Text(viewModel.themeName)
                 .font(.largeTitle)
             Text("Score = \(viewModel.score)")
                 .font(.title)
             Button("New Game") {
                 viewModel.startNewGame()
-            }
+            }*/
             cards
             Spacer()
-            themeButtons
-            Divider()
+            //themeButtons
+            //Divider()
             shuffleButton
         }
         .padding()
