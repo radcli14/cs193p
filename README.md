@@ -5,6 +5,7 @@ Homework exercises for the spring 2023 Stanford [CS193p](https://cs193p.sites.st
 
 A few of the important concepts that I learned in this segment of the course:
 - Pinning a view preview in XCode to keep it on-screen when changing scripts you are editing
+- Using generics (such as `MemoryGame<CardContent> where CardContent : Equatable`) to specify that there can be multiple types as input provided that they conform to a protocal
 - Using opacity to control what aspects of a view are visible, instead of a conditional, when sizing is dependent on view contents
 - Using `.aspectRatio` and `minimumScaleFactor` to fit contents nicely within a view that may change sizes
 - Initializing ViewModels at the `App` level as `@StateObject`, injected as `@ObservedObject` in views
@@ -12,6 +13,7 @@ A few of the important concepts that I learned in this segment of the course:
 - Usage of `static` variables and functions, which are type functions that exist prior to initialization, don't depend on non-static variables, and are constant
 - Varying associated data with different cases of enums
 - That the `@ViewBuilder` annotation is necessary when a `func` or `var` generates a list of views, but not if you encapsulate a single view
+- How to build a custom shape by defining a `Path`
 
 | Programming Assignment 1 | Post Lecture 4                 | Programming Assignment 2 | Post Lecture 6                 |
 |--------------------------|--------------------------------|--------------------------|--------------------------------|
