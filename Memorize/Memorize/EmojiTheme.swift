@@ -19,7 +19,7 @@ struct HalloweenTheme: EmojiTheme {
     let name = "Halloween"
     let icon = "person.2"
     let emojis = ["👻", "🎃", "🕷️", "👺", "🏴‍☠️", "🧌", "👽", "💀", "🧞", "🤖"]
-    let nPairs = 2
+    let nPairs = 4
     let cardColor = "orange"
 }
 
