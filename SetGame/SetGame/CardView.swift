@@ -15,23 +15,14 @@ struct CardView: View {
     }
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(.gray)
-            VStack {
-                ForEach(0..<card.n, id: \.self) { _ in
-                    shape
-                        .foregroundColor(color)
-                        .aspectRatio(2, contentMode: .fit)
-                        //.padding(12)
-                }
-            }
-            //.padding(12)
-        }
+        shape
+            .foregroundColor(color)
+            .aspectRatio(Constants.aspectRatio, contentMode: .fit)
+            .cardify(n: card.n, isFaceUp: true)
     }
     
     @ViewBuilder
-    var shape: some View {
+    private var shape: some View {
         switch card.typeOfShape {
         case .diamond: Diamond()
         case .squiggle: Squiggle()
@@ -39,12 +30,16 @@ struct CardView: View {
         }
     }
     
-    var color: Color {
+   private var color: Color {
         switch card.color {
         case .red: Color.red
         case .green: Color.green
         case .purple: Color.purple
         }
+    }
+    
+    private struct Constants {
+        static let aspectRatio: CGFloat = 2
     }
 }
 
