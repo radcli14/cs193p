@@ -89,4 +89,10 @@ class EmojiMemoryGame: ObservableObject {
         self.theme = theme
         model = EmojiMemoryGame.createMemoryGame(with: theme)
     }
+    
+    // MARK: - Constants
+    
+    private struct Constants {
+        
+    }
 }

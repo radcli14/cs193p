@@ -33,9 +33,9 @@ struct CardView: View {
     @ViewBuilder
     var shape: some View {
         switch card.typeOfShape {
-        case .diamond: RoundedRectangle(cornerRadius: 12)
-        case .squiggle: Rectangle()
-        case .oval: Capsule()
+        case .diamond: Diamond()
+        case .squiggle: Squiggle()
+        case .oval: Ellipse()
         }
     }
     
