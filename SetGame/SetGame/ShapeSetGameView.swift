@@ -14,7 +14,7 @@ struct ShapeSetGameView: View {
         VStack {
             Text("SET!").font(.largeTitle)
             AspectVGrid(
-                viewModel.cards,
+                Array(viewModel.cards[..<9]),
                 aspectRatio: 2/3
             ) { card in
                 CardView(card)
