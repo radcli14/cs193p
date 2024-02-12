@@ -24,9 +24,18 @@ struct CardView: View {
     @ViewBuilder
     private var shape: some View {
         switch card.typeOfShape {
-        case .diamond: Diamond()
-        case .squiggle: Squiggle()
-        case .oval: Ellipse()
+        case .diamond:
+            Diamond()
+                .stroke(color, lineWidth: Constants.lineWidth)
+                .fill(cardFill)
+        case .squiggle:
+            Squiggle()
+                .stroke(color, lineWidth:  Constants.lineWidth)
+                .fill(cardFill)
+        case .oval:
+            Ellipse()
+                .stroke(color, lineWidth:  Constants.lineWidth)
+                .fill(cardFill)
         }
     }
     
@@ -38,10 +47,21 @@ struct CardView: View {
         }
     }
     
+    private var cardFill: Color {
+        switch card.shading {
+        case .solid: color
+        case .striped: color.opacity(0.25)
+        case .open: Color.white
+        }
+    }
+    
     private struct Constants {
         static let aspectRatio: CGFloat = 2
+        static let lineWidth: CGFloat = 5
     }
 }
+
+
 
 #Preview {
     CardView(ShapeSetGame().cards.first!)
