@@ -18,6 +18,10 @@ A few of the important concepts that I learned in this segment of the course:
 - Using `.transition(AnyTransition.<...>)` to animate when a view enters or exits the UI
 - Using `.matchedGeometry(id: Id, in: Namespace)` to animate views that move from one container to another
 - Implicit `.animation` can override explicit `withAnimation { } `
+- Using `.transition(.asymmetric(insertion: .identity, removal: .identity))` for when we want to override the default transition, but don't want to specify only `.transition(.identity)` which would have no transition; this works well with the `.matchedGeometry` transition
+- Storing related data in tuples, i.e. `(0, causedByCardId: "")`, and unpacking with `let (amount, causedByCardId) = lastScoreChange`
+- Number formating in the `Text` object, for example to show the sign of the number
+- Using `Color.clear` as a placeholder for when a view has either not showed up yet, or been removed from a container, to make sure the space remains occupied
 
 | Programming Assignment 1 | After Lecture 4                | Programming Assignment 2 | After Lecture 6                |
 |--------------------------|--------------------------------|--------------------------|--------------------------------|
