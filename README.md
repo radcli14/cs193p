@@ -14,7 +14,11 @@ A few of the important concepts that I learned in this segment of the course:
 - Varying associated data with different cases of enums
 - That the `@ViewBuilder` annotation is necessary when a `func` or `var` generates a list of views, but not if you encapsulate a single view
 - How to build a custom shape by defining a `Path`
+- When a view is first visible on screen it will show with the values its initialized with, it won't animate to those values, animation only occurs when something changes in a view that is already on screen
+- Using `.transition(AnyTransition.<...>)` to animate when a view enters or exits the UI
+- Using `.matchedGeometry(id: Id, in: Namespace)` to animate views that move from one container to another
+- Implicit `.animation` can override explicit `withAnimation { } `
 
-| Programming Assignment 1 | Post Lecture 4                 | Programming Assignment 2 | Post Lecture 6                 |
+| Programming Assignment 1 | After Lecture 4                | Programming Assignment 2 | After Lecture 6                |
 |--------------------------|--------------------------------|--------------------------|--------------------------------|
 | ![PA1](images/pa1.png)   | ![L4](images/postLecture4.png) | ![PA2](images/pa2.png)   | ![L6](images/postLecture6.png) |
