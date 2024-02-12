@@ -118,18 +118,22 @@ struct EmojiMemoryGameView: View {
                     viewModel.changeTheme(to: theme)
                     dealt = Set<Card.ID>()
                 }) {
-                    VStack {
-                        Image(systemName: theme.icon)
-                            .imageScale(.large)
-                            .font(viewModel.isSelected(theme) ? .title : .body)
-                        Text(theme.name)
-                            .font(.caption2)
-                    }
-                    .foregroundColor(viewModel.isSelected(theme) ? .green : .blue)
-                    .frame(width: Constants.themeButtonWidth)
+                    themeButtonIconAndTextStack(for: theme)    
                 }
             }
         }
+    }
+    
+    private func themeButtonIconAndTextStack(for theme: EmojiTheme) -> some View {
+        VStack {
+            Image(systemName: theme.icon)
+                .imageScale(.large)
+                .font(viewModel.isSelected(theme) ? .title : .body)
+            Text(theme.name)
+                .font(.caption2)
+        }
+        .foregroundColor(viewModel.isSelected(theme) ? .green : .blue)
+        .frame(width: Constants.themeButtonWidth)
     }
     
     private var shuffleButton: some View {
