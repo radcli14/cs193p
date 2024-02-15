@@ -52,3 +52,29 @@ struct SetGame {
         }
     }
 }
+
+extension [SetGame.Card] {
+    var isSet: Bool {
+        return countIsValid && numberCanMakeValidSet && typeOfShapeCanMakeValidSet && shadingCanMakeValidSet && colorCanMakeValidSet
+    }
+    
+    var countIsValid: Bool {
+        self.count == 3
+    }
+    
+    var numberCanMakeValidSet: Bool {
+        Set(self.map { $0.number }).count != 2
+    }
+    
+    var typeOfShapeCanMakeValidSet: Bool {
+        Set(self.map { $0.typeOfShape }).count != 2
+    }
+    
+    var shadingCanMakeValidSet: Bool {
+        Set(self.map { $0.shading }).count != 2
+    }
+    
+    var colorCanMakeValidSet: Bool {
+        Set(self.map { $0.color }).count != 2
+    }
+}
