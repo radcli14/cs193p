@@ -22,6 +22,7 @@
 		8A1D2CD52B5EF469006C8922 /* Diamond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1D2CD42B5EF469006C8922 /* Diamond.swift */; };
 		8A1D2CD72B5EF6B8006C8922 /* Squiggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1D2CD62B5EF6B8006C8922 /* Squiggle.swift */; };
 		8A1D2CD92B5F1B15006C8922 /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1D2CD82B5F1B15006C8922 /* Cardify.swift */; };
+		8AD8D1742B7E832100C39422 /* Striped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD8D1732B7E832100C39422 /* Striped.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		8A1D2CD42B5EF469006C8922 /* Diamond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diamond.swift; sourceTree = "<group>"; };
 		8A1D2CD62B5EF6B8006C8922 /* Squiggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Squiggle.swift; sourceTree = "<group>"; };
 		8A1D2CD82B5F1B15006C8922 /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
+		8AD8D1732B7E832100C39422 /* Striped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Striped.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				8A1D2C9C2B5BEBC0006C8922 /* ShapeSetGameView.swift */,
 				8A1D2CCC2B5D4FAE006C8922 /* AspectVGrid.swift */,
 				8A1D2CC82B5BF34F006C8922 /* CardView.swift */,
+				8AD8D1732B7E832100C39422 /* Striped.swift */,
 				8A1D2CD82B5F1B15006C8922 /* Cardify.swift */,
 				8A1D2CD42B5EF469006C8922 /* Diamond.swift */,
 				8A1D2CD62B5EF6B8006C8922 /* Squiggle.swift */,
@@ -288,6 +291,7 @@
 				8A1D2CCD2B5D4FAE006C8922 /* AspectVGrid.swift in Sources */,
 				8A1D2CC52B5BEFF6006C8922 /* SetGame.swift in Sources */,
 				8A1D2C9B2B5BEBC0006C8922 /* SetGameApp.swift in Sources */,
+				8AD8D1742B7E832100C39422 /* Striped.swift in Sources */,
 				8A1D2CC92B5BF34F006C8922 /* CardView.swift in Sources */,
 				8A1D2CD92B5F1B15006C8922 /* Cardify.swift in Sources */,
 				8A1D2CCB2B5D4BC1006C8922 /* CardCondition.swift in Sources */,
