@@ -13,20 +13,47 @@ struct ShapeSetGameView: View {
     var body: some View {
         VStack {
             Text("SET!").font(.largeTitle)
-            AspectVGrid(
-                Array(viewModel.visibleCards),
-                aspectRatio: Constants.aspectRatio
-            ) { card in
-                CardView(card)
-                    .padding(Constants.paddingAroundCards)
-                    .onTapGesture {
-                        withAnimation {
-                            viewModel.choose(card)
-                        }
-                    }
+            visibleCards
+            Divider()
+            HStack {
+                deal3Button
+                Spacer()
+                newGameButton
             }
+            .font(.title2)
         }
         .padding()
+    }
+    
+    private var visibleCards: some View {
+        AspectVGrid(
+            Array(viewModel.visibleCards),
+            aspectRatio: Constants.aspectRatio
+        ) { card in
+            CardView(card)
+                .padding(Constants.paddingAroundCards)
+                .onTapGesture {
+                    withAnimation {
+                        viewModel.choose(card)
+                    }
+                }
+        }
+    }
+    
+    private var deal3Button: some View {
+        Button("Deal 3") {
+            withAnimation {
+                viewModel.deal3()
+            }
+        }
+    }
+    
+    private var newGameButton: some View {
+        Button("New Game") {
+            withAnimation {
+                viewModel.newGame()
+            }
+        }
     }
     
     private struct Constants {

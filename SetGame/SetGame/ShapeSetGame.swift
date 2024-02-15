@@ -14,6 +14,11 @@ class ShapeSetGame: ObservableObject {
         return SetGame()
     }
     
+    func newGame() {
+        model.newGame()
+        model.deal()
+    }
+    
     typealias Card = SetGame.Card
     
     var cards: [Card] {
@@ -21,10 +26,14 @@ class ShapeSetGame: ObservableObject {
     }
     
     var visibleCards: [Card] {
-        return Array(model.cards[0..<model.numberOfVisibleCards])
+        return model.visibleCards
     }
     
     func choose(_ card: Card) {
         model.choose(card)
+    }
+    
+    func deal3() {
+        model.deal3()
     }
 }

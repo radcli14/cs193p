@@ -26,7 +26,38 @@ struct SetGame {
         return shuffled ? cards.shuffled() : cards
     }
     
-    var numberOfVisibleCards = 25
+    // MARK: Dealing
+    
+    private let initialNumberOfVisibleCards = 12
+    var visibleCards: [Card] = []
+    var matchedCards: [Card] {
+        cards.filter { card in card.isMatched }
+    }
+    var deck: [Card] {
+        cards.filter { card in !(visibleCards.contains(card) || matchedCards.contains(card)) }
+    }
+    
+    mutating func newGame() {
+        cards.shuffle()
+        unChooseAllCards()
+        visibleCards = []
+    }
+    
+    mutating func deal() {
+        visibleCards = Array(cards[0..<initialNumberOfVisibleCards])
+    }
+    
+    mutating func deal3() {
+        if !deck.isEmpty {
+            for _ in 0 ..< 3 {
+                if let newCard = deck.first {
+                    visibleCards.append(newCard)
+                }
+            }
+        }
+    }
+    
+    // MARK: Choose Cards
     
     var chosenCards: [Card] {
         cards.filter { $0.isChosen }
@@ -34,41 +65,64 @@ struct SetGame {
     var chosenIndices: [Int] {
         chosenCards.map { card in cards.firstIndex(of: card)! }
     }
-    mutating func unChooseAll() {
-        cards.indices.forEach { index in
-            cards[index].isChosen = false
-        }
-    }
-    
-    mutating func flipCardsThatAreMatched() {
-        chosenIndices.forEach { index in
-            if cards[index].isMatched {
-                cards[index].isFaceUp = false
-            }
-        }
-    }
 
     mutating func choose(_ card: Card) {
+        print("User chose card \(card)")
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
             // This is the first new card selected after three were already selected, delect everything that has been tapped to this point
-            if chosenCards.countIsValid {
+            if chosenCards.count == 3 {
+                print("  Three cards were already selected")
                 flipCardsThatAreMatched()
-                unChooseAll()
+                unChooseAllCards()
             }
             
             // This is a card that was tapped before a count of three was reached, choose or unchoose it
             if cards[chosenIndex].isFaceUp, chosenCards.count <= 3, !cards[chosenIndex].isMatched {
                 cards[chosenIndex].isChosen.toggle()
+                print("  Toggled isChosen to \(cards[chosenIndex].isChosen)")
             }
+            
+            print("  chosenCards.count = \(chosenCards.count)")
             
             // If it is a set, then these are matched
             if chosenCards.isSet {
+                print("    Found a complete set!")
                 chosenIndices.forEach { index in
                     cards[index].isMatched = true
+                    print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
                 }
+            }
+            
+            if chosenCards.countIsValid && !chosenCards.isSet {
+                print("    The selected cards are not a correct set")
+                print("      countIsValid = \(chosenCards.countIsValid)")
+                print("      numberCanMakeValidSet = \(chosenCards.numberCanMakeValidSet)")
+                print("      typeOfShapeCanMakeValidSet = \(chosenCards.typeOfShapeCanMakeValidSet)")
+                print("      shadingCanMakeValidSet = \(chosenCards.shadingCanMakeValidSet)")
+                print("      colorCanMakeValidSet = \(chosenCards.colorCanMakeValidSet)")
             }
         }
     }
+    
+    private mutating func unChooseAllCards() {
+        cards.indices.forEach { index in
+            if cards[index].isChosen {
+                cards[index].isChosen = false
+                print("      Toggled \(cards[index]).isChosen to \(cards[index].isChosen )")
+            }
+        }
+    }
+    
+    private mutating func flipCardsThatAreMatched() {
+        chosenIndices.forEach { index in
+            if cards[index].isMatched {
+                cards[index].isFaceUp = false
+                print("      Toggled \(cards[index]).isFaceUp to \(cards[index].isFaceUp )")
+            }
+        }
+    }
+    
+    // MARK: Card
     
     struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
         let number: NumberOfShapes
