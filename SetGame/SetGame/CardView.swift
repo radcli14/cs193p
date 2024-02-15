@@ -18,7 +18,7 @@ struct CardView: View {
         shape
             .foregroundColor(color)
             .aspectRatio(Constants.aspectRatio, contentMode: .fit)
-            .cardify(n: card.n, isFaceUp: true)
+            .cardify(n: card.n, isFaceUp: card.isFaceUp, isSelected: card.isChosen)
     }
     
     @ViewBuilder
@@ -64,5 +64,5 @@ struct CardView: View {
 
 
 #Preview {
-    CardView(ShapeSetGame().cards.first!)
+    CardView(SetGame.Card(.three, .diamond, .open, .green))
 }

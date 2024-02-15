@@ -10,6 +10,7 @@ import SwiftUI
 struct Cardify: ViewModifier {
     let n: Int
     var isFaceUp: Bool
+    var isSelected: Bool
 
     func body(content: Content) -> some View {
         GeometryReader { geometry in
@@ -19,7 +20,8 @@ struct Cardify: ViewModifier {
                 )
                 base.strokeBorder(lineWidth: Constants.lineWidthRatio * geometry.size.width)
                     .background(base.fill(.white))
-                    .overlay { 
+                    .shadow(color: .accentColor, radius: isSelected ? Constants.shadowRadiusRatio * geometry.size.width : 0)
+                    .overlay {
                         VStack(spacing: Constants.spacingRatio * geometry.size.width) {
                             ForEach(0..<n, id: \.self) { _ in
                                 content
@@ -42,11 +44,12 @@ struct Cardify: ViewModifier {
         static let roundingRatio = 0.175
         static let paddingRatio = 0.1
         static let spacingRatio = 0.1
+        static let shadowRadiusRatio: CGFloat = 0.05
     }
 }
 
 extension View {
-    func cardify(n: Int, isFaceUp: Bool) -> some View {
-        modifier(Cardify(n: n, isFaceUp: isFaceUp))
+    func cardify(n: Int, isFaceUp: Bool, isSelected: Bool) -> some View {
+        modifier(Cardify(n: n, isFaceUp: isFaceUp, isSelected: isSelected))
     }
 }

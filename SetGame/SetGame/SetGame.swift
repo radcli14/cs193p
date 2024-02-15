@@ -8,7 +8,7 @@
 import Foundation
 
 struct SetGame {
-    let cards = createCards()
+    private(set) var cards = createCards()
     
     static private func createCards(shuffled: Bool = true) -> [Card] {
         var cards: [Card] = []
@@ -26,11 +26,26 @@ struct SetGame {
         return shuffled ? cards.shuffled() : cards
     }
     
+    var chosenCards: [Card] {
+        cards.filter { $0.isChosen }
+    }
+    
+    mutating func choose(_ card: Card) {
+        if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
+            
+            cards[chosenIndex].isChosen.toggle()
+        }
+        
+    }
+    
     struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
         let number: NumberOfShapes
         let typeOfShape: TypeOfShape
         let shading: Shading
         let color: ShapeColor
+        
+        var isFaceUp = true
+        var isChosen = false
         
         init(_ number: NumberOfShapes, _ typeOfShape: TypeOfShape, _ shading: Shading, _ color: ShapeColor) {
             self.number = number

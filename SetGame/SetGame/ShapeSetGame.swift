@@ -14,7 +14,13 @@ class ShapeSetGame: ObservableObject {
         return SetGame()
     }
     
-    var cards: Array<SetGame.Card> {
+    typealias Card = SetGame.Card
+    
+    var cards: [Card] {
         return model.cards
+    }
+    
+    func choose(_ card: Card) {
+        model.choose(card)
     }
 }

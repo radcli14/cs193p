@@ -19,6 +19,11 @@ struct ShapeSetGameView: View {
             ) { card in
                 CardView(card)
                     .padding(4)
+                    .onTapGesture {
+                        withAnimation {
+                            viewModel.choose(card)
+                        }
+                    }
             }
         }
         .padding()

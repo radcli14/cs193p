@@ -10,6 +10,8 @@ import XCTest
 
 final class SetGameTests: XCTestCase {
 
+    let setGame = SetGame()
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -24,6 +26,13 @@ final class SetGameTests: XCTestCase {
         // Any test you write for XCTest can be annotated as throws and async.
         // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
         // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+        print("Testing goodSet")
+        let goodSet: [SetGame.Card] = [
+            SetGame.Card(.one, .diamond, .open, .green),
+            SetGame.Card(.two, .diamond, .solid, .purple),
+            SetGame.Card(.three, .diamond, .striped, .red)
+        ]
+        XCTAssert(goodSet.isSet)
     }
 
     func testPerformanceExample() throws {
