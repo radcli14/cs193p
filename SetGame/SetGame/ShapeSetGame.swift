@@ -20,6 +20,10 @@ class ShapeSetGame: ObservableObject {
         return model.cards
     }
     
+    var visibleCards: [Card] {
+        return Array(model.cards[0..<model.numberOfVisibleCards])
+    }
+    
     func choose(_ card: Card) {
         model.choose(card)
     }

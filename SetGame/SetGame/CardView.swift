@@ -18,7 +18,7 @@ struct CardView: View {
         shape
             .foregroundColor(color)
             .aspectRatio(Constants.aspectRatio, contentMode: .fit)
-            .cardify(n: card.n, isFaceUp: card.isFaceUp, isSelected: card.isChosen)
+            .cardify(n: card.n, isFaceUp: card.isFaceUp, isSelected: card.isChosen, isMatched: card.isMatched)
     }
     
     @ViewBuilder

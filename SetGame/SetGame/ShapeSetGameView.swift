@@ -14,11 +14,11 @@ struct ShapeSetGameView: View {
         VStack {
             Text("SET!").font(.largeTitle)
             AspectVGrid(
-                Array(viewModel.cards[..<9]),
-                aspectRatio: 2/3
+                Array(viewModel.visibleCards),
+                aspectRatio: Constants.aspectRatio
             ) { card in
                 CardView(card)
-                    .padding(4)
+                    .padding(Constants.paddingAroundCards)
                     .onTapGesture {
                         withAnimation {
                             viewModel.choose(card)
@@ -27,6 +27,11 @@ struct ShapeSetGameView: View {
             }
         }
         .padding()
+    }
+    
+    private struct Constants {
+        static let aspectRatio: CGFloat = 2/3
+        static let paddingAroundCards: CGFloat = 4
     }
 }
 

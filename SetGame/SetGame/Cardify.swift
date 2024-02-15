@@ -11,6 +11,7 @@ struct Cardify: ViewModifier {
     let n: Int
     var isFaceUp: Bool
     var isSelected: Bool
+    var isMatched: Bool
 
     func body(content: Content) -> some View {
         GeometryReader { geometry in
@@ -20,7 +21,10 @@ struct Cardify: ViewModifier {
                 )
                 base.strokeBorder(lineWidth: Constants.lineWidthRatio * geometry.size.width)
                     .background(base.fill(.white))
-                    .shadow(color: .accentColor, radius: isSelected ? Constants.shadowRadiusRatio * geometry.size.width : 0)
+                    .shadow(
+                        color: isMatched ? .green : .accentColor,
+                        radius: isSelected ? Constants.shadowRadiusRatio * geometry.size.width : 0
+                    )
                     .overlay {
                         VStack(spacing: Constants.spacingRatio * geometry.size.width) {
                             ForEach(0..<n, id: \.self) { _ in
@@ -49,7 +53,7 @@ struct Cardify: ViewModifier {
 }
 
 extension View {
-    func cardify(n: Int, isFaceUp: Bool, isSelected: Bool) -> some View {
-        modifier(Cardify(n: n, isFaceUp: isFaceUp, isSelected: isSelected))
+    func cardify(n: Int, isFaceUp: Bool, isSelected: Bool, isMatched: Bool) -> some View {
+        modifier(Cardify(n: n, isFaceUp: isFaceUp, isSelected: isSelected, isMatched: isMatched))
     }
 }
