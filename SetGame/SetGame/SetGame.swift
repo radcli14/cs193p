@@ -61,9 +61,13 @@ struct SetGame {
             return
         }
         for _ in 0 ..< 3 {
-            if let indexOfNextCardInDeck {
-                dealCard(at: indexOfNextCardInDeck)
-            }
+            dealNextCard()
+        }
+    }
+    
+    private mutating func dealNextCard() {
+        if let indexOfNextCardInDeck {
+            dealCard(at: indexOfNextCardInDeck)
         }
     }
     
@@ -120,7 +124,11 @@ struct SetGame {
                 print("    Found a complete set!")
                 chosenIndices.forEach { index in
                     cards[index].isMatched = true
-                    replaceCard(at: index)
+                    if let indexInVisibleCards = visibleCards.firstIndex(of: cards[index]) {
+                        replaceCard(at: indexInVisibleCards)
+                    } else {
+                        dealNextCard()
+                    }
                     print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
                 }
             }
@@ -148,15 +156,6 @@ struct SetGame {
             }
         }
     }
-    
-    /*private mutating func flipCardsThatAreMatched() {
-        chosenIndices.forEach { index in
-            if cards[index].isMatched {
-                cards[index].isFaceUp = false
-                print("      Toggled \(cards[index]).isFaceUp to \(cards[index].isFaceUp )")
-            }
-        }
-    }*/
     
     // MARK: Card
     

@@ -11,10 +11,11 @@ struct ShapeSetGameView: View {
     @ObservedObject var viewModel: ShapeSetGame
     
     typealias Card = SetGame.Card
+    @Namespace private var dealingNamespace
+    @Namespace private var discardingNamespace
     
     var body: some View {
         VStack {
-            Text("SET!").font(.largeTitle)
             visibleCards
             HStack {
                 deck
@@ -23,19 +24,14 @@ struct ShapeSetGameView: View {
             }
             .padding()
             Divider()
-            HStack {
-                deal3Button
-                Spacer()
-                newGameButton
-            }
-            .font(.title2)
+            newGameButton
         }
         .padding()
     }
     
     private var deck: some View {
         VStack {
-            stackOfCards(viewModel.deck, withCount: true)
+            stackOfCards(viewModel.deck, namespace: dealingNamespace, withCount: true)
             textBelowStackOfCards("Deck")
         }
         .onTapGesture {
@@ -56,6 +52,8 @@ struct ShapeSetGameView: View {
         ) { card in
             CardView(card)
                 .padding(Constants.paddingAroundCards)
+                .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                .matchedGeometryEffect(id: card.id, in: discardingNamespace)
                 .onTapGesture {
                     withAnimation {
                         viewModel.choose(card)
@@ -66,15 +64,16 @@ struct ShapeSetGameView: View {
     
     private var discarded: some View {
         VStack {
-            stackOfCards(viewModel.discarded)
+            stackOfCards(viewModel.discarded, namespace: discardingNamespace)
             textBelowStackOfCards("Discard")
         }
     }
     
-    func stackOfCards(_ cards: [Card], withCount: Bool = false) -> some View {
+    func stackOfCards(_ cards: [Card], namespace: Namespace.ID, withCount: Bool = false) -> some View {
         ZStack {
             ForEach(cards) { card in
                 CardView(card)
+                    .matchedGeometryEffect(id: card.id, in: namespace)
             }
         }
         .frame(
@@ -97,20 +96,13 @@ struct ShapeSetGameView: View {
     
     // MARK: Buttons
     
-    private var deal3Button: some View {
-        Button("Deal 3") {
-            withAnimation {
-                viewModel.deal3()
-            }
-        }
-    }
-    
     private var newGameButton: some View {
         Button("New Game") {
             withAnimation {
                 viewModel.newGame()
             }
         }
+        .font(.title2)
     }
     
     // MARK: Constants
