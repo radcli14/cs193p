@@ -16,6 +16,9 @@ class ShapeSetGame: ObservableObject {
     
     func newGame() {
         model.newGame()
+    }
+    
+    func deal() {
         model.deal()
     }
     
@@ -25,14 +28,22 @@ class ShapeSetGame: ObservableObject {
         return model.cards
     }
     
+    var deck: [Card] {
+        return model.deck
+    }
+    
     var visibleCards: [Card] {
         return model.visibleCards
+    }
+    
+    var discarded: [Card] {
+        return model.discarded
     }
     
     func choose(_ card: Card) {
         model.choose(card)
     }
-    
+
     func deal3() {
         model.deal3()
     }

@@ -31,19 +31,16 @@ struct SetGame {
     private let initialNumberOfVisibleCards = 12
     private var visibleCardIndices: [Int] = []
     var visibleCards: [Card] {
-        var result: [Card] = []
-        for (idx, card) in cards.enumerated() {
-            if visibleCardIndices.contains(idx) {
-                result.append(card)
-            }
-        }
-        return result
+        visibleCardIndices.map { index in cards[index] }
     }
     var matchedCards: [Card] {
         cards.filter { card in card.isMatched }
     }
     var deck: [Card] {
         cards.filter { card in !(visibleCards.contains(card) || matchedCards.contains(card)) }
+    }
+    var discarded: [Card] {
+        cards.filter { card in matchedCards.contains(card) && !visibleCards.contains(card) }
     }
     
     mutating func newGame() {
@@ -54,7 +51,9 @@ struct SetGame {
     }
     
     mutating func deal() {
-        visibleCardIndices = (0..<initialNumberOfVisibleCards).map { $0 }
+        for index in 0..<initialNumberOfVisibleCards {
+            dealCard(at: index)
+        }
     }
     
     mutating func deal3() {
@@ -63,8 +62,22 @@ struct SetGame {
         }
         for _ in 0 ..< 3 {
             if let indexOfNextCardInDeck {
-                visibleCardIndices.append(indexOfNextCardInDeck)
+                dealCard(at: indexOfNextCardInDeck)
             }
+        }
+    }
+    
+    private mutating func dealCard(at index: Int) {
+        cards[index].isFaceUp = true
+        visibleCardIndices.append(index)
+    }
+    
+    private mutating func replaceCard(at index: Int) {
+        if let indexOfNextCardInDeck {
+            cards[indexOfNextCardInDeck].isFaceUp = true
+            visibleCardIndices[index] = indexOfNextCardInDeck
+        } else {
+            visibleCardIndices.remove(at: index)
         }
     }
     
@@ -90,7 +103,7 @@ struct SetGame {
             // This is the first new card selected after three were already selected, delect everything that has been tapped to this point
             if chosenCards.count == 3 {
                 print("  Three cards were already selected")
-                flipCardsThatAreMatched()
+                //flipCardsThatAreMatched()
                 unChooseAllCards()
             }
             
@@ -107,17 +120,13 @@ struct SetGame {
                 print("    Found a complete set!")
                 chosenIndices.forEach { index in
                     cards[index].isMatched = true
+                    replaceCard(at: index)
                     print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
                 }
             }
             
             if chosenCards.countIsValid && !chosenCards.isSet {
-                print("    The selected cards are not a correct set")
-                print("      countIsValid = \(chosenCards.countIsValid)")
-                print("      numberCanMakeValidSet = \(chosenCards.numberCanMakeValidSet)")
-                print("      typeOfShapeCanMakeValidSet = \(chosenCards.typeOfShapeCanMakeValidSet)")
-                print("      shadingCanMakeValidSet = \(chosenCards.shadingCanMakeValidSet)")
-                print("      colorCanMakeValidSet = \(chosenCards.colorCanMakeValidSet)")
+                chosenCards.printWhyTheSetFailed()
             }
         }
     }
@@ -140,14 +149,14 @@ struct SetGame {
         }
     }
     
-    private mutating func flipCardsThatAreMatched() {
+    /*private mutating func flipCardsThatAreMatched() {
         chosenIndices.forEach { index in
             if cards[index].isMatched {
                 cards[index].isFaceUp = false
                 print("      Toggled \(cards[index]).isFaceUp to \(cards[index].isFaceUp )")
             }
         }
-    }
+    }*/
     
     // MARK: Card
     
@@ -157,7 +166,7 @@ struct SetGame {
         let shading: Shading
         let color: ShapeColor
         
-        var isFaceUp = true
+        var isFaceUp = false
         var isChosen = false
         var isMatched = false
         
@@ -205,5 +214,14 @@ extension [SetGame.Card] {
     
     var colorCanMakeValidSet: Bool {
         Set(self.map { $0.color }).count != 2
+    }
+    
+    func printWhyTheSetFailed() {
+        print("    The selected cards are not a correct set")
+        print("      countIsValid = \(countIsValid)")
+        print("      numberCanMakeValidSet = \(numberCanMakeValidSet)")
+        print("      typeOfShapeCanMakeValidSet = \(typeOfShapeCanMakeValidSet)")
+        print("      shadingCanMakeValidSet = \(shadingCanMakeValidSet)")
+        print("      colorCanMakeValidSet = \(colorCanMakeValidSet)")
     }
 }
