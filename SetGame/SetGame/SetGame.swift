@@ -29,7 +29,16 @@ struct SetGame {
     // MARK: Dealing
     
     private let initialNumberOfVisibleCards = 12
-    var visibleCards: [Card] = []
+    private var visibleCardIndices: [Int] = []
+    var visibleCards: [Card] {
+        var result: [Card] = []
+        for (idx, card) in cards.enumerated() {
+            if visibleCardIndices.contains(idx) {
+                result.append(card)
+            }
+        }
+        return result
+    }
     var matchedCards: [Card] {
         cards.filter { card in card.isMatched }
     }
@@ -40,21 +49,30 @@ struct SetGame {
     mutating func newGame() {
         cards.shuffle()
         unChooseAllCards()
-        visibleCards = []
+        unMatchAllCards()
+        visibleCardIndices = []
     }
     
     mutating func deal() {
-        visibleCards = Array(cards[0..<initialNumberOfVisibleCards])
+        visibleCardIndices = (0..<initialNumberOfVisibleCards).map { $0 }
     }
     
     mutating func deal3() {
-        if !deck.isEmpty {
-            for _ in 0 ..< 3 {
-                if let newCard = deck.first {
-                    visibleCards.append(newCard)
-                }
+        if deck.isEmpty {
+            return
+        }
+        for _ in 0 ..< 3 {
+            if let indexOfNextCardInDeck {
+                visibleCardIndices.append(indexOfNextCardInDeck)
             }
         }
+    }
+    
+    private var indexOfNextCardInDeck: Int? {
+        guard let nextCard = deck.first else {
+            return nil
+        }
+        return cards.firstIndex(of: nextCard)
     }
     
     // MARK: Choose Cards
@@ -109,6 +127,15 @@ struct SetGame {
             if cards[index].isChosen {
                 cards[index].isChosen = false
                 print("      Toggled \(cards[index]).isChosen to \(cards[index].isChosen )")
+            }
+        }
+    }
+    
+    private mutating func unMatchAllCards() {
+        cards.indices.forEach { index in
+            if cards[index].isMatched {
+                cards[index].isMatched = false
+                print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
             }
         }
     }
