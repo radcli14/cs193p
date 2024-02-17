@@ -47,6 +47,7 @@ struct SetGame {
         cards.shuffle()
         unChooseAllCards()
         unMatchAllCards()
+        unFaceUpAllCards()
         visibleCardIndices = []
     }
     
@@ -157,6 +158,15 @@ struct SetGame {
         }
     }
     
+    private mutating func unFaceUpAllCards() {
+        cards.indices.forEach { index in
+            if cards[index].isFaceUp {
+                cards[index].isFaceUp = false
+                print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
+            }
+        }
+    }
+    
     // MARK: Card
     
     struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
@@ -168,7 +178,7 @@ struct SetGame {
         var isFaceUp = false
         var isChosen = false
         var isMatched = false
-        
+
         init(_ number: NumberOfShapes, _ typeOfShape: TypeOfShape, _ shading: Shading, _ color: ShapeColor) {
             self.number = number
             self.typeOfShape = typeOfShape
