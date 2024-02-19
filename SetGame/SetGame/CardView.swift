@@ -15,27 +15,41 @@ struct CardView: View {
     }
     
     var body: some View {
-        shape
+        shapeStack
             .foregroundColor(color)
-            .aspectRatio(Constants.aspectRatio, contentMode: .fit)
-            .cardify(n: card.n, isFaceUp: card.isFaceUp, isSelected: card.isChosen, isMatched: card.isMatched)
+            .cardify(isFaceUp: card.isFaceUp, isSelected: card.isChosen, isMatched: card.isMatched)
+    }
+    
+    private var shapeStack: some View {
+        GeometryReader { geometry in
+            VStack(spacing: geometry.size.height * Constants.spacingRatio) {
+                ForEach(0..<card.n, id: \.self) { _ in
+                    shape.aspectRatio(Constants.aspectRatioForShape, contentMode: .fit)
+                }
+            }
+            .frame(maxHeight: .infinity)
+            .padding(geometry.size.width * Constants.paddingRatio)
+        }
     }
     
     @ViewBuilder
     private var shape: some View {
-        switch card.typeOfShape {
-        case .diamond:
-            Diamond()
-                .stroke(color, lineWidth: Constants.lineWidth)
-                .fill(cardFill)
-        case .squiggle:
-            Squiggle()
-                .stroke(color, lineWidth:  Constants.lineWidth)
-                .fill(cardFill)
-        case .oval:
-            Ellipse()
-                .stroke(color, lineWidth:  Constants.lineWidth)
-                .fill(cardFill)
+        GeometryReader { geometry in
+            switch card.typeOfShape {
+            case .diamond:
+                Diamond()
+                    .stroke(color, lineWidth: geometry.size.width * Constants.lineWidthRatio)
+                    .fill(cardFill)
+            case .squiggle:
+                Squiggle()
+                    .stroke(color, lineWidth: geometry.size.width * Constants.lineWidthRatio)
+                    .fill(cardFill)
+            case .oval:
+                Ellipse()
+                    .stroke(color, lineWidth: geometry.size.width * Constants.lineWidthRatio)
+                    .fill(cardFill)
+            }
+
         }
     }
     
@@ -56,13 +70,13 @@ struct CardView: View {
     }
     
     private struct Constants {
-        static let aspectRatio: CGFloat = 2
-        static let lineWidth: CGFloat = 5
+        static let aspectRatioForShape: CGFloat = 2
+        static let lineWidthRatio: CGFloat = 0.1
+        static let spacingRatio: CGFloat = 0.05
+        static let paddingRatio: CGFloat = 0.15
     }
 }
 
-
-
 #Preview {
-    CardView(SetGame.Card(.three, .diamond, .open, .green))
+    CardView(SetGame.Card(.three, .diamond, .open, .green, isFaceUp: true))
 }

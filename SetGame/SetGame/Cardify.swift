@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct Cardify: ViewModifier {
-    let n: Int
     var isSelected: Bool
     var isMatched: Bool
     
-    init(n: Int, isFaceUp: Bool, isSelected: Bool, isMatched: Bool) {
-        self.n = n
+    init(isFaceUp: Bool, isSelected: Bool, isMatched: Bool) {
         rotation = isFaceUp ? 0 : 180
         self.isSelected = isSelected
         self.isMatched = isMatched
@@ -39,16 +37,11 @@ struct Cardify: ViewModifier {
                 base.strokeBorder(lineWidth: Constants.lineWidthRatio * geometry.size.width)
                     .background(base.fill(.white))
                     .shadow(
-                        color: .accentColor, // isMatched ? .green : .yellow,
+                        color: .accentColor,
                         radius: isSelected ? Constants.shadowRadiusRatio * geometry.size.width : 0
                     )
                     .overlay {
-                        VStack(spacing: Constants.spacingRatio * geometry.size.width) {
-                            ForEach(0..<n, id: \.self) { _ in
-                                content
-                            }
-                        }
-                        .padding(Constants.paddingRatio * geometry.size.width)
+                        content
                     }
                     .opacity(isFaceUp ? 1 : 0)
                 base.fill()
@@ -64,14 +57,13 @@ struct Cardify: ViewModifier {
         static let lineWidthRatio: CGFloat = 0.01
         static let aspectRatio: CGFloat = 2
         static let roundingRatio = 0.175
-        static let paddingRatio = 0.1
         static let spacingRatio = 0.1
         static let shadowRadiusRatio: CGFloat = 0.05
     }
 }
 
 extension View {
-    func cardify(n: Int, isFaceUp: Bool, isSelected: Bool, isMatched: Bool) -> some View {
-        modifier(Cardify(n: n, isFaceUp: isFaceUp, isSelected: isSelected, isMatched: isMatched))
+    func cardify(isFaceUp: Bool, isSelected: Bool, isMatched: Bool) -> some View {
+        modifier(Cardify(isFaceUp: isFaceUp, isSelected: isSelected, isMatched: isMatched))
     }
 }
