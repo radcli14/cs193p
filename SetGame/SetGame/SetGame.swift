@@ -141,29 +141,41 @@ struct SetGame {
     }
     
     private mutating func unChooseAllCards() {
-        cards.indices.forEach { index in
-            if cards[index].isChosen {
-                cards[index].isChosen = false
-                print("      Toggled \(cards[index]).isChosen to \(cards[index].isChosen )")
-            }
-        }
+        falsifyAllCards(forStateNamed: "isChosen")
     }
     
     private mutating func unMatchAllCards() {
+        falsifyAllCards(forStateNamed: "isMatched")
+    }
+    
+    private mutating func unFaceUpAllCards() {
+        falsifyAllCards(forStateNamed: "isFaceUp")
+    }
+    
+    private mutating func falsifyAllCards(forStateNamed name: String) {
         cards.indices.forEach { index in
-            if cards[index].isMatched {
-                cards[index].isMatched = false
-                print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
+            if let state = getCardState(named: name, at: index), state == true {
+                setToFalse(cardStateNamed: name, at: index)
+                print("      Toggled \(cards[index]).\(name) to", getCardState(named: name, at: index) ?? "??")
             }
         }
     }
     
-    private mutating func unFaceUpAllCards() {
-        cards.indices.forEach { index in
-            if cards[index].isFaceUp {
-                cards[index].isFaceUp = false
-                print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
-            }
+    private func getCardState(named name: String, at index: Int) -> Bool? {
+        switch name {
+        case "isFaceUp": cards[index].isFaceUp
+        case "isChosen": cards[index].isChosen
+        case "isMatched": cards[index].isMatched
+        default: nil
+        }
+    }
+    
+    private mutating func setToFalse(cardStateNamed name: String, at index: Int) {
+        switch name {
+        case "isFaceUp": cards[index].isFaceUp = false
+        case "isChosen": cards[index].isChosen = false
+        case "isMatched": cards[index].isMatched = false
+        default: print("no state with name \(name)")
         }
     }
     

@@ -9,10 +9,8 @@ import Foundation
 import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
-    private static let defaultTheme = HalloweenTheme()
-    
     private static func createMemoryGame() -> MemoryGame<String> {
-        return createMemoryGame(with: defaultTheme)
+        return createMemoryGame(with: Constants.defaultTheme)
     }
     
     private static func createMemoryGame(with theme: EmojiTheme) -> MemoryGame<String> {
@@ -74,7 +72,7 @@ class EmojiMemoryGame: ObservableObject {
         while newTheme?.name == theme.name {
             newTheme = themes.randomElement()
         }
-        changeTheme(to: newTheme ?? EmojiMemoryGame.defaultTheme)
+        changeTheme(to: newTheme ?? Constants.defaultTheme)
     }
     
     func shuffle() {
@@ -93,6 +91,6 @@ class EmojiMemoryGame: ObservableObject {
     // MARK: - Constants
     
     private struct Constants {
-        
+        static let defaultTheme = HalloweenTheme()
     }
 }

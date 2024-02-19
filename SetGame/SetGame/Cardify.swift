@@ -9,9 +9,26 @@ import SwiftUI
 
 struct Cardify: ViewModifier {
     let n: Int
-    var isFaceUp: Bool
     var isSelected: Bool
     var isMatched: Bool
+    
+    init(n: Int, isFaceUp: Bool, isSelected: Bool, isMatched: Bool) {
+        self.n = n
+        rotation = isFaceUp ? 0 : 180
+        self.isSelected = isSelected
+        self.isMatched = isMatched
+    }
+    
+    var isFaceUp: Bool {
+        rotation < 90
+    }
+    
+    var rotation: Double
+    
+    var animatableData: Double {
+        get { rotation }
+        set { rotation = newValue }
+    }
 
     func body(content: Content) -> some View {
         GeometryReader { geometry in
@@ -37,6 +54,7 @@ struct Cardify: ViewModifier {
                 base.fill()
                     .opacity(isFaceUp ? 0 : 1)
             }
+            .rotation3DEffect(.degrees(rotation), axis: (0, 1, 0))
         }
     }
     

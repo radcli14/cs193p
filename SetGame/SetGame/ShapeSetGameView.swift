@@ -20,11 +20,13 @@ struct ShapeSetGameView: View {
             HStack {
                 deck
                 Spacer()
+                newGameButton
+                Spacer()
                 discarded
             }
             .padding()
-            Divider()
-            newGameButton
+            //Divider()
+            
         }
         .padding()
     }
@@ -35,14 +37,23 @@ struct ShapeSetGameView: View {
             textBelowStackOfCards("Deck")
         }
         .onTapGesture {
-            withAnimation {
-                if viewModel.visibleCards.isEmpty {
-                    viewModel.deal()
-                } else {
-                    viewModel.deal3()
-                }
+            if viewModel.visibleCards.isEmpty {
+                viewModel.deal()
+            } else {
+                viewModel.deal3()
             }
+            animateNewlyDealtCards()
         }
+    }
+    
+    @State private var dealt = [Card.ID]() // Set<Card.ID>()
+    
+    private func isDealt(_ card: Card) -> Bool {
+        dealt.contains(card.id)
+    }
+    
+    private var undealtCards: [Card] {
+        viewModel.cards.filter { !isDealt($0) }
     }
     
     private var visibleCards: some View {
@@ -50,15 +61,33 @@ struct ShapeSetGameView: View {
             Array(viewModel.visibleCards),
             aspectRatio: Constants.aspectRatio
         ) { card in
-            CardView(card)
-                .padding(Constants.paddingAroundCards)
-                .matchedGeometryEffect(id: card.id, in: dealingNamespace)
-                .matchedGeometryEffect(id: card.id, in: discardingNamespace)
-                .onTapGesture {
-                    withAnimation {
-                        viewModel.choose(card)
+            if isDealt(card) {
+                CardView(card)
+                    .padding(Constants.paddingAroundCards)
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                    .transition(.asymmetric(insertion: .identity, removal: .identity))
+                    .matchedGeometryEffect(id: card.id, in: discardingNamespace)
+                    .onTapGesture {
+                        withAnimation {
+                            viewModel.choose(card)
+                        }
+                        animateNewlyDealtCards()
                     }
+            } else {
+                Color.clear
+            }
+        }
+    }
+    
+    private func animateNewlyDealtCards() {
+        var delay: TimeInterval = 0
+        for (idx, card) in viewModel.visibleCards.enumerated() {
+            if !isDealt(card) {
+                withAnimation(Constants.dealAnimation.delay(delay)) {
+                    dealt.insert(card.id, at: idx)
                 }
+                delay += Constants.dealInterval
+            }
         }
     }
     
@@ -100,6 +129,7 @@ struct ShapeSetGameView: View {
         Button("New Game") {
             withAnimation {
                 viewModel.newGame()
+                dealt = []
             }
         }
         .font(.title2)
@@ -111,6 +141,8 @@ struct ShapeSetGameView: View {
         static let aspectRatio: CGFloat = 2/3
         static let paddingAroundCards: CGFloat = 4
         static let deckAndDiscardWidth: CGFloat = 60
+        static let dealInterval: TimeInterval = 0.15
+        static let dealAnimation: Animation = .easeInOut(duration: 1)
     }
 }
 
