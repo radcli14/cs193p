@@ -108,6 +108,19 @@ struct SetGame {
             // This is the first new card selected after three were already selected, delect everything that has been tapped to this point
             if chosenCards.count == 3 {
                 print("  Three cards were already selected")
+                // If it is a set, then these are matched
+                if chosenCards.isSet {
+                    print("    Found a complete set!")
+                    chosenIndices.forEach { index in
+                        cards[index].isMatched = true
+                        if let indexInVisibleCards = visibleCards.firstIndex(of: cards[index]) {
+                            replaceCard(at: indexInVisibleCards)
+                        } else {
+                            dealNextCard()
+                        }
+                        print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
+                    }
+                }
                 //flipCardsThatAreMatched()
                 unChooseAllCards()
             }
@@ -117,23 +130,8 @@ struct SetGame {
                 cards[chosenIndex].isChosen.toggle()
                 print("  Toggled isChosen to \(cards[chosenIndex].isChosen)")
             }
-            
             print("  chosenCards.count = \(chosenCards.count)")
-            
-            // If it is a set, then these are matched
-            if chosenCards.isSet {
-                print("    Found a complete set!")
-                chosenIndices.forEach { index in
-                    cards[index].isMatched = true
-                    if let indexInVisibleCards = visibleCards.firstIndex(of: cards[index]) {
-                        replaceCard(at: indexInVisibleCards)
-                    } else {
-                        dealNextCard()
-                    }
-                    print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
-                }
-            }
-            
+
             if chosenCards.countIsValid && !chosenCards.isSet {
                 chosenCards.printWhyTheSetFailed()
             }
