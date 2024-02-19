@@ -14,7 +14,7 @@ struct Diamond: Shape {
         p.addLine(to: CGPoint(x: rect.midX, y: rect.maxY)) // Center-Top
         p.addLine(to: CGPoint(x: rect.maxX, y: rect.midY)) // Right-Center
         p.addLine(to: CGPoint(x: rect.midX, y: rect.minY)) // Center-Bottom
-        p.addLine(to: CGPoint(x: rect.minX, y: rect.midY)) // Left-Center
+        p.closeSubpath() // Left-Center
         return p
     }
 }

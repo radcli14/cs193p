@@ -26,6 +26,7 @@ struct Squiggle: Shape {
             control1: CGPoint(x: threeQuarterX, y: rect.minY),
             control2: CGPoint(x: oneQuarterX, y: rect.midY)
         )
+        p.closeSubpath()
         return p
     }
     
