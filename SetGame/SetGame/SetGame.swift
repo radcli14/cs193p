@@ -189,11 +189,12 @@ struct SetGame {
         var isChosen = false
         var isMatched = false
 
-        init(_ number: NumberOfShapes, _ typeOfShape: TypeOfShape, _ shading: Shading, _ color: ShapeColor) {
+        init(_ number: NumberOfShapes, _ typeOfShape: TypeOfShape, _ shading: Shading, _ color: ShapeColor, isFaceUp: Bool = false) {
             self.number = number
             self.typeOfShape = typeOfShape
             self.shading = shading
             self.color = color
+            self.isFaceUp = isFaceUp
         }
         
         var n: Int {
