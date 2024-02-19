@@ -38,22 +38,25 @@ struct CardView: View {
             switch card.typeOfShape {
             case .diamond:
                 Diamond()
-                    .stroke(color, lineWidth: geometry.size.width * Constants.lineWidthRatio)
+                    .stroke(color, lineWidth: shapeStrokeLineWidth(for: card, with: geometry))
                     .fill(cardFill)
             case .squiggle:
                 Squiggle()
-                    .stroke(color, lineWidth: geometry.size.width * Constants.lineWidthRatio)
+                    .stroke(color, lineWidth: shapeStrokeLineWidth(for: card, with: geometry))
                     .fill(cardFill)
             case .oval:
                 Ellipse()
-                    .stroke(color, lineWidth: geometry.size.width * Constants.lineWidthRatio)
+                    .stroke(color, lineWidth: shapeStrokeLineWidth(for: card, with: geometry))
                     .fill(cardFill)
             }
-
         }
     }
     
-   private var color: Color {
+    private func shapeStrokeLineWidth(for card: SetGame.Card, with geometry: GeometryProxy) -> CGFloat {
+        (card.shading == .open ? 1.0 : 0.5) * geometry.size.width * Constants.lineWidthRatio
+    }
+    
+    private var color: Color {
         switch card.color {
         case .red: Color.red
         case .green: Color.green
@@ -72,11 +75,11 @@ struct CardView: View {
     private struct Constants {
         static let aspectRatioForShape: CGFloat = 2
         static let lineWidthRatio: CGFloat = 0.1
-        static let spacingRatio: CGFloat = 0.05
+        static let spacingRatio: CGFloat = 0.075
         static let paddingRatio: CGFloat = 0.15
     }
 }
 
 #Preview {
-    CardView(SetGame.Card(.three, .diamond, .open, .green, isFaceUp: true))
+    CardView(SetGame.Card(.three, .diamond, .striped, .green, isFaceUp: true))
 }
