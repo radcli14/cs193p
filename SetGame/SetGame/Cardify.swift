@@ -39,7 +39,7 @@ struct Cardify: ViewModifier {
                 base.strokeBorder(lineWidth: Constants.lineWidthRatio * geometry.size.width)
                     .background(base.fill(.white))
                     .shadow(
-                        color: isMatched ? .green : .accentColor,
+                        color: .accentColor, // isMatched ? .green : .yellow,
                         radius: isSelected ? Constants.shadowRadiusRatio * geometry.size.width : 0
                     )
                     .overlay {

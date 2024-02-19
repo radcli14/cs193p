@@ -36,6 +36,10 @@ class ShapeSetGame: ObservableObject {
         return model.visibleCards
     }
     
+    var chosenCards: [Card] {
+        return model.chosenCards
+    }
+    
     var discarded: [Card] {
         return model.discarded
     }

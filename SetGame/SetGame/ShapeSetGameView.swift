@@ -24,11 +24,12 @@ struct ShapeSetGameView: View {
                 Spacer()
                 discarded
             }
-            .padding()
-            //Divider()
-            
         }
         .padding()
+    }
+    
+    var highlightedCardAccentColor: Color {
+        !viewModel.chosenCards.countIsValid ? .yellow : viewModel.chosenCards.isSet ? .green : .red
     }
     
     private var deck: some View {
@@ -46,7 +47,7 @@ struct ShapeSetGameView: View {
         }
     }
     
-    @State private var dealt = [Card.ID]() // Set<Card.ID>()
+    @State private var dealt = [Card.ID]()
     
     private func isDealt(_ card: Card) -> Bool {
         dealt.contains(card.id)
@@ -64,6 +65,7 @@ struct ShapeSetGameView: View {
             if isDealt(card) {
                 CardView(card)
                     .padding(Constants.paddingAroundCards)
+                    .accentColor(highlightedCardAccentColor)
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                     .transition(.asymmetric(insertion: .identity, removal: .identity))
                     .matchedGeometryEffect(id: card.id, in: discardingNamespace)
@@ -102,6 +104,7 @@ struct ShapeSetGameView: View {
         ZStack {
             ForEach(cards) { card in
                 CardView(card)
+                    .accentColor(highlightedCardAccentColor)
                     .matchedGeometryEffect(id: card.id, in: namespace)
             }
         }
@@ -142,7 +145,7 @@ struct ShapeSetGameView: View {
         static let paddingAroundCards: CGFloat = 4
         static let deckAndDiscardWidth: CGFloat = 60
         static let dealInterval: TimeInterval = 0.15
-        static let dealAnimation: Animation = .easeInOut(duration: 1)
+        static let dealAnimation: Animation = .easeInOut(duration: 0.5)
     }
 }
 
