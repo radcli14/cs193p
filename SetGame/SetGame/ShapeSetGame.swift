@@ -47,6 +47,10 @@ class ShapeSetGame: ObservableObject {
     func choose(_ card: Card) {
         model.choose(card)
     }
+    
+    var chosenCardsAreASet: Bool? {
+        model.chosenCards.countIsValid ? model.chosenCards.isSet : nil
+    }
 
     func deal3() {
         model.deal3()

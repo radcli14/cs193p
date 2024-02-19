@@ -17,6 +17,9 @@ struct ShapeSetGameView: View {
     var body: some View {
         VStack {
             visibleCards
+                .overlay {
+                    AnimationForNewSetSelection(isGoodSet: viewModel.chosenCardsAreASet)
+                }
             HStack {
                 deck
                 Spacer()
