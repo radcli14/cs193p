@@ -14,7 +14,7 @@ struct AnimationForNewSetSelection: View {
     
     var body: some View {
         if let isGoodSet {
-            Text(isGoodSet ? "Good Set!" : "Bad Set :(")
+            text
                 .font(.largeTitle)
                 .foregroundColor(isGoodSet ? .green : .red)
                 .shadow(color: .black, radius: 1.5, x: 1, y: 1)
@@ -28,6 +28,15 @@ struct AnimationForNewSetSelection: View {
                 .onDisappear {
                     offset = 0
                 }
+        }
+    }
+    
+    var text: some View {
+        VStack {
+            Text(isGoodSet == true ? "Good Set" : "Bad Set")
+                .font(.largeTitle)
+            Text(isGoodSet == true ? "👍" : "😢")
+                .font(.system(size: 96))
         }
     }
 }
