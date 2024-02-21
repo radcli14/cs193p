@@ -61,8 +61,39 @@ struct SetGame {
         if deck.isEmpty {
             return
         }
-        for _ in 0 ..< 3 {
-            dealNextCard()
+        // If it is a set, then toggle the cards to be matched, and replace in the deck
+        if chosenCards.isSet {
+            print("Tapped deck while chosenCards is a complete set!")
+            replaceGoodSetWithNewCards()
+        } else {
+            print("Tapped deck while chosenCards is not a complete set")
+            for _ in 0 ..< 3 {
+                dealNextCard()
+            }
+        }
+    }
+    
+    private mutating func replaceGoodSetWithNewCards() {
+        chosenIndices.forEach { index in
+            cards[index].isMatched = true
+            print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
+            
+            // Either swap the
+            if let indexInVisibleCards = visibleCards.firstIndex(of: cards[index]) {
+                replaceCard(at: indexInVisibleCards)
+            } else {
+                dealNextCard()
+            }
+        }
+    }
+    
+    private mutating func discardGoodSet() {
+        chosenIndices.forEach { index in
+            cards[index].isMatched = true
+            print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
+            if let indexInVisibleCards = visibleCards.firstIndex(of: cards[index]) {
+                visibleCardIndices.remove(at: indexInVisibleCards)
+            }
         }
     }
     
@@ -105,23 +136,14 @@ struct SetGame {
     mutating func choose(_ card: Card) {
         print("User chose card \(card)")
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
-            // This is the first new card selected after three were already selected, delect everything that has been tapped to this point
+            // This is the first new card selected after three were already selected,
+            // handle if it is a set, then deselect everything that has been tapped to this point
             if chosenCards.count == 3 {
                 print("  Three cards were already selected")
-                // If it is a set, then these are matched
                 if chosenCards.isSet {
                     print("    Found a complete set!")
-                    chosenIndices.forEach { index in
-                        cards[index].isMatched = true
-                        if let indexInVisibleCards = visibleCards.firstIndex(of: cards[index]) {
-                            replaceCard(at: indexInVisibleCards)
-                        } else {
-                            dealNextCard()
-                        }
-                        print("      Toggled \(cards[index]).isMatched to \(cards[index].isMatched )")
-                    }
+                    discardGoodSet()
                 }
-                //flipCardsThatAreMatched()
                 unChooseAllCards()
             }
             
@@ -132,6 +154,7 @@ struct SetGame {
             }
             print("  chosenCards.count = \(chosenCards.count)")
 
+            // This is here for debugging, if a bad set is selected, print to the console "why?" it is bad
             if chosenCards.countIsValid && !chosenCards.isSet {
                 chosenCards.printWhyTheSetFailed()
             }

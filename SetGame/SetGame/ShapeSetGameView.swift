@@ -103,7 +103,7 @@ struct ShapeSetGameView: View {
         }
     }
     
-    func stackOfCards(_ cards: [Card], namespace: Namespace.ID, withCount: Bool = false) -> some View {
+    private func stackOfCards(_ cards: [Card], namespace: Namespace.ID, withCount: Bool = false) -> some View {
         ZStack {
             ForEach(cards) { card in
                 CardView(card)
