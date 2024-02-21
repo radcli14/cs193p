@@ -37,7 +37,7 @@ struct Cardify: ViewModifier {
                 base.strokeBorder(lineWidth: Constants.lineWidthRatio * geometry.size.width)
                     .background(base.fill(.white))
                     .shadow(
-                        color: .accentColor,
+                        color: isSelected ? .accentColor : .clear,
                         radius: isSelected ? Constants.shadowRadiusRatio * geometry.size.width : 0
                     )
                     .overlay {
@@ -48,6 +48,7 @@ struct Cardify: ViewModifier {
                     .opacity(isFaceUp ? 0 : 1)
             }
             .rotation3DEffect(.degrees(rotation), axis: (0, 1, 0))
+            .rotation3DEffect(.degrees(isSelected ? 10 : 0), axis: (-1, 0, 0))
         }
     }
     
