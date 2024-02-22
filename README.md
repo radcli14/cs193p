@@ -1,7 +1,11 @@
 # cs193p
 Homework exercises for the spring 2023 Stanford [CS193p](https://cs193p.sites.stanford.edu) course in SwiftUI.
 
-## Memorize!
+## Memorize! and Set
+
+| Memorize!                        | Set                    |
+|----------------------------------|------------------------|
+| ![Memorize](images/memorize.gif) | ![Set](images/set.gif) |
 
 A few of the important concepts that I learned in this segment of the course:
 - Pinning a view preview in XCode to keep it on-screen when changing scripts you are editing
@@ -23,6 +27,3 @@ A few of the important concepts that I learned in this segment of the course:
 - Number formating in the `Text` object, for example to show the sign of the number
 - Using `Color.clear` as a placeholder for when a view has either not showed up yet, or been removed from a container, to make sure the space remains occupied
 
-| Programming Assignment 1 | After Lecture 4                | Programming Assignment 2 | After Lecture 6                |
-|--------------------------|--------------------------------|--------------------------|--------------------------------|
-| ![PA1](images/pa1.png)   | ![L4](images/postLecture4.png) | ![PA2](images/pa2.png)   | ![L6](images/postLecture6.png) |
