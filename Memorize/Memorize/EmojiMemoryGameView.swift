@@ -15,21 +15,20 @@ struct EmojiMemoryGameView: View {
         VStack {
             Text(viewModel.themeName)
                 .font(.largeTitle)
-            /*Button("New Game") {
-                viewModel.startNewGame()
-            }*/
             cards
             Spacer()
             themeButtons
             Divider()
-            HStack {            
+            HStack(alignment: .center) {            
                 score
-                Spacer()
-                deck.foregroundColor(viewModel.themeColor)
                 Spacer()
                 shuffleButton
             }
-            .font(.title)
+            .overlay {
+                deck.foregroundColor(viewModel.themeColor)
+            }
+            .font(.title3)
+            .padding()
         }
         .padding()
     }
@@ -77,6 +76,11 @@ struct EmojiMemoryGameView: View {
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                     .transition(.asymmetric(insertion: .identity, removal: .identity))
             }
+            if !undealtCards.isEmpty {
+                Text("Deal!")
+                    .foregroundColor(.white)
+                    .font(.callout)
+            }
         }
         .frame(width: Constants.deckWidth, height: Constants.deckWidth / Constants.aspectRatio)
         .onTapGesture {
@@ -111,7 +115,7 @@ struct EmojiMemoryGameView: View {
     }
     
     private var themeButtons: some View {
-        HStack(alignment: .bottom) {
+        HStack(alignment: .bottom, spacing: 0.0) {
             ForEach(viewModel.themes.indices, id: \.self) { index in
                 let theme = viewModel.themes[index]
                 Button(action: {
@@ -147,7 +151,7 @@ struct EmojiMemoryGameView: View {
     private struct Constants {
         static let aspectRatio: CGFloat = 2/3
         static let spacing: CGFloat = 4
-        static let themeButtonWidth: CGFloat = 56
+        static let themeButtonWidth: CGFloat = 64
         static let deckWidth: CGFloat = 50
         static let dealInterval: TimeInterval = 0.15
         static let dealAnimation: Animation = .easeInOut(duration: 1)
