@@ -23,7 +23,10 @@ struct ShapeSetGameView: View {
             HStack {
                 deck
                 Spacer()
-                newGameButton
+                VStack(spacing: Constants.buttonSpacing) {
+                    newGameButton
+                    shuffleButton
+                }
                 Spacer()
                 discarded
             }
@@ -139,11 +142,23 @@ struct ShapeSetGameView: View {
             }
         }
         .font(.title2)
+        .buttonStyle(.borderedProminent)
+    }
+    
+    private var shuffleButton: some View {
+        Button("Shuffle") {
+            withAnimation {
+                viewModel.shuffle()
+            }
+        }
+        .font(.title2)
+        .buttonStyle(.bordered)
     }
     
     // MARK: Constants
     
     private struct Constants {
+        static let buttonSpacing: CGFloat = 16
         static let aspectRatio: CGFloat = 2/3
         static let paddingAroundCards: CGFloat = 4
         static let deckAndDiscardWidth: CGFloat = 60

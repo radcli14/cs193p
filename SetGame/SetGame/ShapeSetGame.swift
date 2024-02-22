@@ -18,6 +18,10 @@ class ShapeSetGame: ObservableObject {
         model.newGame()
     }
     
+    func shuffle() {
+        model.shuffle()
+    }
+    
     func deal() {
         model.deal()
     }

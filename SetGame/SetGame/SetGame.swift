@@ -51,6 +51,10 @@ struct SetGame {
         visibleCardIndices = []
     }
     
+    mutating func shuffle() {
+        visibleCardIndices.shuffle()
+    }
+    
     mutating func deal() {
         for index in 0..<initialNumberOfVisibleCards {
             dealCard(at: index)
