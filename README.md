@@ -3,8 +3,8 @@ Homework exercises for the spring 2023 Stanford [CS193p](https://cs193p.sites.st
 
 ## Memorize! and Set
 
-| Memorize!                        | Set                    |
-|----------------------------------|------------------------|
+| Memorize!                                     | Set                                      |
+|-----------------------------------------------|------------------------------------------|
 | <img src="images/memorize.gif" width="128px"> | <img src="images/set.gif" width="128px"> |
 
 A few of the important concepts that I learned in this segment of the course:
@@ -27,3 +27,8 @@ A few of the important concepts that I learned in this segment of the course:
 - Number formating in the `Text` object, for example to show the sign of the number
 - Using `Color.clear` as a placeholder for when a view has either not showed up yet, or been removed from a container, to make sure the space remains occupied
 
+## Emoji Art
+
+- Using back quotes around a reserved keyword when I want to use it anyway, for example, extending `Emoji.Position` with a function `.in`
+- Using `Self` in a static let of a struct to create an instance of its own type
+- Using `.draggable` and `.dropDestination` modifiers to enable drag and drop
