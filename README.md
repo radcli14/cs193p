@@ -3,8 +3,8 @@ Homework exercises for the spring 2023 Stanford [CS193p](https://cs193p.sites.st
 
 ## Memorize! and Set
 
-| Memorize!                        | Set                    |
-|----------------------------------|------------------------|
+| Memorize!                                     | Set                                      |
+|-----------------------------------------------|------------------------------------------|
 | <img src="images/memorize.gif" width="128px"> | <img src="images/set.gif" width="128px"> |
 
 A few of the important concepts that I learned in this segment of the course:
@@ -27,3 +27,14 @@ A few of the important concepts that I learned in this segment of the course:
 - Number formating in the `Text` object, for example to show the sign of the number
 - Using `Color.clear` as a placeholder for when a view has either not showed up yet, or been removed from a container, to make sure the space remains occupied
 
+## Emoji Art
+
+- Using back quotes around a reserved keyword when I want to use it anyway, for example, extending `Emoji.Position` with a function `.in`
+- Using `Self` in a static let of a struct to create an instance of its own type
+- Using `.draggable` and `.dropDestination` modifiers to enable drag and drop
+- `@GestureState` objects are only used changed whiel the gesture is active, after gesture ends, returns to original state, permanent state should be updated in `.onEnded`
+- Use `oneGesture.simultaneously(with: otherGesture)` so that multiple gestures can be recognized, one doesn't override the other
+- Using `inout` for function arguments that get modified inside the function and copied back out
+- The word "Store" is commonly used when creating viewmodels that store data and persist
+- Giving an `.id` to a view to make the view get replaced when its contents change, which enables animating transition
+- Using `.contextMenu` modifier to add a menu that pops up when you hold onto a view
