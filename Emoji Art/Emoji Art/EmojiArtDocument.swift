@@ -57,6 +57,10 @@ class EmojiArtDocument: ObservableObject {
             resize(emoji, by: scale)
         }
     }
+    
+    func toggleEmojiSelection(of emoji: Emoji) {
+        emojiArt[emoji].isSelected.toggle()
+    }
 }
 
 extension EmojiArt.Emoji {

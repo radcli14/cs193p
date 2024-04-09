@@ -51,10 +51,15 @@ struct EmojiArt {
         emojis.firstIndex(where: { $0.id == emojiId })
     }
     
+    var selectedEmojis: [Emoji] {
+        return emojis.filter { $0.isSelected }
+    }
+    
     struct Emoji: Identifiable {
         let string: String
         var position: Position
         var size: Int
+        var isSelected = false
         var id: Int
         
         struct Position {

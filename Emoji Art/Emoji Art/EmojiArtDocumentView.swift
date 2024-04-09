@@ -47,8 +47,18 @@ struct EmojiArtDocumentView: View {
             .position(Emoji.Position.zero.in(geometry))
         ForEach(document.emojis) { emoji in
             Text(emoji.string)
+                .background {
+                    RoundedRectangle(cornerRadius: Constants.selectedEmojiCornerRadius)
+                        .stroke(emoji.isSelected ? Color.green : Color.clear,
+                                lineWidth: Constants.selectedEmojiLineWidth)
+                }
                 .font(emoji.font)
                 .position(emoji.position.in(geometry))
+                .onTapGesture {
+                    withAnimation {
+                        document.toggleEmojiSelection(of: emoji)
+                    }
+                }
         }
     }
     
@@ -106,6 +116,13 @@ struct EmojiArtDocumentView: View {
             x: Int((location.x - center.x - pan.width) / zoom),
             y: Int(-(location.y - center.y - pan.height) / zoom)
         )
+    }
+    
+    // MARK: - Constants
+    
+    private struct Constants {
+        static let selectedEmojiCornerRadius = CGFloat(12)
+        static let selectedEmojiLineWidth = CGFloat(5)
     }
 }
 
