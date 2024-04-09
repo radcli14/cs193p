@@ -41,6 +41,18 @@ struct EmojiArtDocumentView: View {
         }
     }
     
+    @ViewBuilder
+    private func documentContents(in geometry: GeometryProxy) -> some View {
+        AsyncImage(url: document.background)
+            .position(Emoji.Position.zero.in(geometry))
+        ForEach(document.emojis) { emoji in
+            Text(emoji.string)
+                .font(emoji.font)
+                .position(emoji.position.in(geometry))
+        }
+    }
+    
+    
     @State private var zoom: CGFloat = 1
     @State private var pan: CGOffset = .zero
     
@@ -59,23 +71,12 @@ struct EmojiArtDocumentView: View {
     
     private var panGesture: some Gesture {
         DragGesture()
-            .updating($gesturePan) { inMotionPan, gesturePan, _ in
-                gesturePan = inMotionPan.translation
+            .updating($gesturePan) { inMotionDragGestureValue, gesturePan, _ in
+                gesturePan = inMotionDragGestureValue.translation
             }
-            .onEnded { value in
-                pan += value.translation
+            .onEnded { endingDragGestureValue in
+                pan += endingDragGestureValue.translation
             }
-    }
-    
-    @ViewBuilder
-    private func documentContents(in geometry: GeometryProxy) -> some View {
-        AsyncImage(url: document.background)
-            .position(Emoji.Position.zero.in(geometry))
-        ForEach(document.emojis) { emoji in
-            Text(emoji.string)
-                .font(emoji.font)
-                .position(emoji.position.in(geometry))
-        }
     }
     
     private func drop(_ sturldatas: [Sturldata], at location: CGPoint, in geometry: GeometryProxy) -> Bool {
