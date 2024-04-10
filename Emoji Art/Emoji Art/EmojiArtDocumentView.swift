@@ -12,15 +12,11 @@ struct EmojiArtDocumentView: View {
     
     @ObservedObject var document: EmojiArtDocument
     
-    private let emojis = "👻🍎😃🤪☹️🤯🐶🐭🦁🐵🦆🐝🐢🐄🐖🌲🌴🌵🍄🌞🌎🔥🌈🌧️🌨️☁️⛄️⛳️🚗🚙🚓🚲🛺🏍️🚘✈️🛩️🚀🚁🏰🏠❤️💤⛵️"
-    
-    private let paletteEmojiSize: CGFloat = 40
-    
     var body: some View {
         VStack {
             documentBody
             PaletteChooser()
-                .font(.system(size: paletteEmojiSize))
+                .font(.system(size: Constants.paletteEmojiSize))
                 .padding(.horizontal)
                 .scrollIndicators(.hidden)
         }
@@ -34,7 +30,7 @@ struct EmojiArtDocumentView: View {
                     .scaleEffect(zoom * gestureZoom)
                     .offset(pan + gesturePan)
             }
-            .gesture(panGesture.simultaneously(with: zoomGesture))
+            .gesture(panGesture.simultaneously(with: zoomGesture).simultaneously(with: tapOnBackgroundGesture))
             .dropDestination(for: Sturldata.self) { sturldatas, location in
                 return drop(sturldatas, at: location, in: geometry)
             }
@@ -89,6 +85,17 @@ struct EmojiArtDocumentView: View {
             }
     }
     
+    private var tapOnBackgroundGesture: some Gesture {
+        TapGesture()
+            .onEnded {
+                if document.someEmojisAreSelected {
+                    withAnimation {
+                        document.deselectAllEmojis()
+                    }
+                }
+            }
+    }
+    
     private func drop(_ sturldatas: [Sturldata], at location: CGPoint, in geometry: GeometryProxy) -> Bool {
         for sturldata in sturldatas {
             switch sturldata {
@@ -100,7 +107,7 @@ struct EmojiArtDocumentView: View {
                 document.addEmoji(
                     emoji,
                     at: emojiPosition(at: location, in: geometry),
-                    size: paletteEmojiSize / zoom
+                    size: Constants.paletteEmojiSize / zoom
                 )
                 return true
             default:
@@ -121,6 +128,7 @@ struct EmojiArtDocumentView: View {
     // MARK: - Constants
     
     private struct Constants {
+        static let paletteEmojiSize: CGFloat = 40
         static let selectedEmojiCornerRadius = CGFloat(12)
         static let selectedEmojiLineWidth = CGFloat(5)
     }

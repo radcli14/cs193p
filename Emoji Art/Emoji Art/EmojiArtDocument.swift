@@ -70,6 +70,18 @@ class EmojiArtDocument: ObservableObject {
     func isSelected(_ emoji: Emoji) -> Bool {
         return selectedEmojis.contains(emoji.id)
     }
+    
+    func deselectAllEmojis() {
+        selectedEmojis.removeAll()
+    }
+    
+    var zeroEmojisAreSelected: Bool {
+        selectedEmojis.isEmpty
+    }
+    
+    var someEmojisAreSelected: Bool {
+        !zeroEmojisAreSelected
+    }
 }
 
 extension EmojiArt.Emoji {
