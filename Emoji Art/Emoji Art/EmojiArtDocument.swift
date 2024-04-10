@@ -10,6 +10,7 @@ import SwiftUI
 class EmojiArtDocument: ObservableObject {
     typealias Emoji = EmojiArt.Emoji
     @Published private var emojiArt = EmojiArt()
+    @Published private var selectedEmojis = Set<Emoji.ID>()
 
     init() {
         //emojiArt.addEmoji("🇺🇸", at: .init(x: -200, y: -150), size: 200)
@@ -59,13 +60,25 @@ class EmojiArtDocument: ObservableObject {
     }
     
     func toggleEmojiSelection(of emoji: Emoji) {
-        emojiArt[emoji].isSelected.toggle()
+        if isSelected(emoji) {
+            selectedEmojis.remove(emoji.id)
+        } else {
+            selectedEmojis.insert(emoji.id)
+        }
+    }
+    
+    func isSelected(_ emoji: Emoji) -> Bool {
+        return selectedEmojis.contains(emoji.id)
     }
 }
 
 extension EmojiArt.Emoji {
     var font: Font {
         Font.system(size: CGFloat(size))
+    }
+    
+    func isSelected(in viewModel: EmojiArtDocument) -> Bool {
+        return viewModel.isSelected(self)
     }
 }
 

@@ -49,7 +49,7 @@ struct EmojiArtDocumentView: View {
             Text(emoji.string)
                 .background {
                     RoundedRectangle(cornerRadius: Constants.selectedEmojiCornerRadius)
-                        .stroke(emoji.isSelected ? Color.green : Color.clear,
+                        .stroke(emoji.isSelected(in: document) ? Color.green : Color.clear,
                                 lineWidth: Constants.selectedEmojiLineWidth)
                 }
                 .font(emoji.font)
