@@ -10,7 +10,7 @@ import SwiftUI
 class EmojiArtDocument: ObservableObject {
     typealias Emoji = EmojiArt.Emoji
     @Published private var emojiArt = EmojiArt()
-    @Published private var selectedEmojis = Set<Emoji.ID>()
+    @Published private(set) var selectedEmojis = Set<Emoji.ID>()
 
     init() {
         //emojiArt.addEmoji("🇺🇸", at: .init(x: -200, y: -150), size: 200)
@@ -35,15 +35,11 @@ class EmojiArtDocument: ObservableObject {
         emojiArt.addEmoji(emoji, at: position, size: Int(size))
     }
     
-    func move(_ emoji: Emoji, by offset: CGOffset) {
-        let existingPosition = emojiArt[emoji].position
-        emojiArt[emoji].position = Emoji.Position(
-            x: existingPosition.x + Int(offset.width),
-            y: existingPosition.y - Int(offset.height)
-        )
+    func move(_ emoji: Emoji, by offset: CGOffset, multiplier: CGFloat = CGFloat(1)) {
+        emojiArt[emoji].move(by: offset)
     }
     
-    func move(emojiWithId id: Emoji.ID, by offset: CGOffset) {
+    func move(emojiWithId id: Emoji.ID, by offset: CGOffset, multiplier: CGFloat = CGFloat(1)) {
         if let emoji = emojiArt[id] {
             move(emoji, by: offset)
         }
@@ -92,11 +88,26 @@ extension EmojiArt.Emoji {
     func isSelected(in viewModel: EmojiArtDocument) -> Bool {
         return viewModel.isSelected(self)
     }
+    
+    mutating func move(by offset: CGOffset) {
+        self.position = self.moved(by: offset)
+    }
+    
+    func moved(by offset: CGOffset, multiplier: CGFloat = CGFloat(1)) -> EmojiArt.Emoji.Position {
+        EmojiArt.Emoji.Position(
+            x: self.position.x + Int(multiplier * offset.width),
+            y: self.position.y - Int(multiplier * offset.height)
+        )
+    }
+    
 }
 
 extension EmojiArt.Emoji.Position {
     func `in`(_ geometry: GeometryProxy) -> CGPoint {
         let center = geometry.frame(in: .local).center
-        return CGPoint(x: center.x + CGFloat(x), y: center.y - CGFloat(y))
+        return CGPoint(
+            x: center.x + CGFloat(x),
+            y: center.y - CGFloat(y)
+        )
     }
 }
