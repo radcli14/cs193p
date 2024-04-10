@@ -35,13 +35,18 @@ class EmojiArtDocument: ObservableObject {
         emojiArt.addEmoji(emoji, at: position, size: Int(size))
     }
     
+    func delete(_ emoji: Emoji) {
+        emojiArt.remove(emoji)
+        selectedEmojis.remove(emoji.id)
+    }
+    
     func move(_ emoji: Emoji, by offset: CGOffset, multiplier: CGFloat = CGFloat(1)) {
-        emojiArt[emoji].move(by: offset)
+        emojiArt[emoji].move(by: offset, multiplier: multiplier)
     }
     
     func move(emojiWithId id: Emoji.ID, by offset: CGOffset, multiplier: CGFloat = CGFloat(1)) {
         if let emoji = emojiArt[id] {
-            move(emoji, by: offset)
+            move(emoji, by: offset, multiplier: multiplier)
         }
     }
     
@@ -89,8 +94,8 @@ extension EmojiArt.Emoji {
         return viewModel.isSelected(self)
     }
     
-    mutating func move(by offset: CGOffset) {
-        self.position = self.moved(by: offset)
+    mutating func move(by offset: CGOffset, multiplier: CGFloat = CGFloat(1)) {
+        self.position = self.moved(by: offset, multiplier: multiplier)
     }
     
     func moved(by offset: CGOffset, multiplier: CGFloat = CGFloat(1)) -> EmojiArt.Emoji.Position {

@@ -42,20 +42,26 @@ struct EmojiArtDocumentView: View {
         AsyncImage(url: document.background)
             .position(Emoji.Position.zero.in(geometry))
         ForEach(document.emojis) { emoji in
-            Text(emoji.string)
-                .background {
-                    RoundedRectangle(cornerRadius: Constants.selectedEmojiCornerRadius)
-                        .stroke(emoji.isSelected(in: document) ? Color.green : Color.clear,
-                                lineWidth: Constants.selectedEmojiLineWidth)
-                }
-                .font(emoji.font)
-                .position(positionDuringPan(for: emoji).in(geometry))
-                .onTapGesture {
-                    withAnimation {
-                        document.toggleEmojiSelection(of: emoji)
-                    }
-                }
+            emojiView(for: emoji, in: geometry)
         }
+    }
+    
+    private func emojiView(for emoji: Emoji, in geometry: GeometryProxy) -> some View {
+        Text(emoji.string)
+            .background {
+                RoundedRectangle(cornerRadius: Constants.selectedEmojiCornerRadius)
+                    .stroke(emoji.isSelected(in: document) ? Color.green : Color.clear,
+                            lineWidth: Constants.selectedEmojiLineWidth)
+            }
+            .emojiContextMenu(onDeleteAction: { document.delete(emoji) })
+            .font(emoji.font)
+            .scaleEffect(emoji.isSelected(in: document) ? gestureZoom : 1)
+            .position(positionDuringPan(for: emoji).in(geometry))
+            .onTapGesture {
+                withAnimation {
+                    document.toggleEmojiSelection(of: emoji)
+                }
+            }
     }
     
     // MARK: - Gestures
@@ -73,6 +79,9 @@ struct EmojiArtDocumentView: View {
             }
             .onEnded { endingPinchScale in
                 backgroundZoom *= document.zeroEmojisAreSelected ? endingPinchScale : 1
+                for id in document.selectedEmojis {
+                    document.resize(emojiWithId: id, by: endingPinchScale)
+                }
             }
     }
     
