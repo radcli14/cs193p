@@ -28,7 +28,7 @@ struct EmojiArtDocumentView: View {
                 Color.white
                 documentContents(in: geometry)
                     .scaleEffect(backgroundZoom * (document.zeroEmojisAreSelected ? gestureZoom : 1))
-                    .offset(backGroundPan + (document.zeroEmojisAreSelected ? gesturePan : .zero))
+                    .offset(backGroundPan + (documentShouldPan ? gesturePan.pan : .zero))
             }
             .gesture(panGesture.simultaneously(with: zoomGesture).simultaneously(with: tapOnBackgroundGesture))
             .dropDestination(for: Sturldata.self) { sturldatas, location in
@@ -57,11 +57,7 @@ struct EmojiArtDocumentView: View {
             .font(emoji.font)
             .scaleEffect(emoji.isSelected(in: document) ? gestureZoom : 1)
             .position(positionDuringPan(for: emoji).in(geometry))
-            .onTapGesture {
-                withAnimation {
-                    document.toggleEmojiSelection(of: emoji)
-                }
-            }
+            .gesture(tapOnEmojiGesture(emoji).simultaneously(with: dragSingleEmojiGesture(emoji.id)))
     }
     
     // MARK: - Gestures
@@ -70,7 +66,12 @@ struct EmojiArtDocumentView: View {
     @State private var backGroundPan: CGOffset = .zero
     
     @GestureState private var gestureZoom: CGFloat = 1
-    @GestureState private var gesturePan: CGOffset = .zero
+    @GestureState private var gesturePan: GesturePanState = GesturePanState()
+
+    private struct GesturePanState {
+        var emojiId: Emoji.ID? = nil
+        var pan: CGOffset = .zero
+    }
     
     private var zoomGesture: some Gesture {
         MagnificationGesture()
@@ -88,7 +89,7 @@ struct EmojiArtDocumentView: View {
     private var panGesture: some Gesture {
         DragGesture()
             .updating($gesturePan) { inMotionDragGestureValue, gesturePan, _ in
-                gesturePan = inMotionDragGestureValue.translation
+                gesturePan = GesturePanState(pan: inMotionDragGestureValue.translation)
             }
             .onEnded { endingDragGestureValue in
                 backGroundPan += document.zeroEmojisAreSelected ? endingDragGestureValue.translation : .zero
@@ -110,6 +111,28 @@ struct EmojiArtDocumentView: View {
                         document.deselectAllEmojis()
                     }
                 }
+            }
+    }
+    
+    private func tapOnEmojiGesture(_ emoji: Emoji) -> some Gesture {
+        TapGesture().onEnded {
+            withAnimation {
+                document.toggleEmojiSelection(of: emoji)
+            }
+        }
+    }
+    
+    private func dragSingleEmojiGesture(_ emojiId: Emoji.ID) -> some Gesture {
+        DragGesture()
+            .updating($gesturePan) { inMotionDragGestureValue, gesturePan, _ in
+                gesturePan = GesturePanState(emojiId: emojiId, pan: inMotionDragGestureValue.translation)
+            }
+            .onEnded { endingDragGestureValue in
+                document.move(
+                    emojiWithId: emojiId,
+                    by: endingDragGestureValue.translation,
+                    multiplier: 1/backgroundZoom
+                )
             }
     }
     
@@ -144,9 +167,17 @@ struct EmojiArtDocumentView: View {
     
     private func positionDuringPan(for emoji: Emoji) -> Emoji.Position {
         emoji.moved(
-            by: emoji.isSelected(in: document) ? gesturePan : .zero,
+            by: emojiShouldPan(emoji) ? gesturePan.pan : .zero,
             multiplier: 1/backgroundZoom
         )
+    }
+    
+    private var documentShouldPan: Bool {
+        document.zeroEmojisAreSelected && gesturePan.emojiId == nil
+    }
+    
+    private func emojiShouldPan(_ emoji: Emoji) -> Bool {
+        (emoji.isSelected(in: document) && gesturePan.emojiId == nil) || gesturePan.emojiId == emoji.id
     }
     
     // MARK: - Constants
