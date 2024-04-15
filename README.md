@@ -29,6 +29,7 @@ A few of the important concepts that I learned in this segment of the course:
 
 ## Emoji Art
 
+A few of the important concepts that I learned in this segment of the course:
 - Using back quotes around a reserved keyword when I want to use it anyway, for example, extending `Emoji.Position` with a function `.in`
 - Using `Self` in a static let of a struct to create an instance of its own type
 - Using `.draggable` and `.dropDestination` modifiers to enable drag and drop
@@ -38,3 +39,21 @@ A few of the important concepts that I learned in this segment of the course:
 - The word "Store" is commonly used when creating viewmodels that store data and persist
 - Giving an `.id` to a view to make the view get replaced when its contents change, which enables animating transition
 - Using `.contextMenu` modifier to add a menu that pops up when you hold onto a view
+- Application sandbox contains an application directory (read-only), documents directory (storage visible to user), application support directory (storage not visible to user), caches (temporary storage, not backed up)
+- Retrieve the above starting from `URL` with static constants like `URL.documentsDirectory`, etc, then use `.appendingPathComponent` to build onto these paths
+- Can create binary data from a URL by `let data = try Data(contentsOf: url)`
+- `FileManager` provides various utilities for manipulating data in files
+- Implementing `Codable` protocol allows a struct to be encoded into JSON, the variables inside the struct must themselves be `Codable`, includes String, Bool, Int, Double, Float, URL, Array, Dictionary, Set, Date, etc
+- If my object is Codable, we can get the JSON representation with `Data = try JSONEncoder().encode(object)`, can do the inverse with `JSONDecoder().decode`
+- `try?` (with a question mark) returns `nil` if the operation failed
+- `UserDefaults` may be used for persisting very simple data, usually access using `let defaults = UserDefaults.standard`, then `defaults.set(object, forKey: "someKey")` and `let i: Int? = defaults.integer(forKey: "myInteger")` for example
+- Three ways to manage an error that is thrown without handling, `try?` ignores, `try!` crashes the program, and `try` inside a function that throws which re-throws it
+- Handleing the error requires `do { try functionThatThrows() } catch let error { /* handle the error */ }`
+- By adding an init to a struct, you negate the free default init, you must add it back in as `init() {}` if you want it
+- If you have an `ObservableObject`, and you want the UI to update on change to a variable that can't be `@Published`, you may invoke the `objectWillChange.send()` method instead
+- Cannot encode `let` with a default value, must make it a `var`
+- The dollar sign, in example `$emojiArt`, is called the "projected value," in the case of the `@State` this is a binding to the value
+- If you mark a `@State` and want to set its value on init of the view, have to use underscore in front of its name, then `.init(initialValue: someValue)`
+- Projected value of a `@StateObject` or `@ObservedObject` passes any of the vars inside that viewmodel with a binding
+- `@Binding` wraps a value that is bound to something else, projected value is a binding to itself, used for getting text from a `TextField`, value from a `Picker`, important for establishing a single source of truth, variable in one location is a `@State` or `@Published`, the other is a `@Binding`
+- `@Environment` is unrelated to `@EnvironmentObject`, documentation of `EnvironmentValues` provides a listing of what is available to modify in the environment, example is `ColorScheme`
