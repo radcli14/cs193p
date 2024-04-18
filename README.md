@@ -57,3 +57,9 @@ A few of the important concepts that I learned in this segment of the course:
 - Projected value of a `@StateObject` or `@ObservedObject` passes any of the vars inside that viewmodel with a binding
 - `@Binding` wraps a value that is bound to something else, projected value is a binding to itself, used for getting text from a `TextField`, value from a `Picker`, important for establishing a single source of truth, variable in one location is a `@State` or `@Published`, the other is a `@Binding`
 - `@Environment` is unrelated to `@EnvironmentObject`, documentation of `EnvironmentValues` provides a listing of what is available to modify in the environment, example is `ColorScheme`
+- `.popover` can be used similarly to sheet, but will create a modal view that will fill a partial portion of the screen, with an arrow pointing to the view it is attached to
+- Using modifier `.focused($focusState, equals: .anEnum)` for when you have multiple text fields in a view, and you want to be able to select focuse between them
+- `.navigationDestination` should go outside of the list containing views that invoke the change in value
+- Can use `.onDelete` modifier on a `ForEach` to add swipe to delete behavior, but can't do it on the `List` directly, the `ForEach` must be inside the `List`
+- Similarly, `.onMove` is used to allow you to drag to change the order of items in the `List`, but must be in the `ForEach`
+- To obtain a binding to an object that exists in a store, often you need to first find the index of that object in the store, then put `$` in front of the store itself and index into that object
