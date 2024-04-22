@@ -56,7 +56,7 @@ struct AspectVGrid<Item: Identifiable, ItemView: View>: View  {
 
 #Preview {
     AspectVGrid(
-        FlagTheme().emojis.map { emoji in
+        EmojiTheme.flags.emojis.map { emoji in
             MemoryGame<String>.Card(
                 isFaceUp: true,
                 content: emoji,

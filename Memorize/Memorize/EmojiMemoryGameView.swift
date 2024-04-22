@@ -10,22 +10,19 @@ import SwiftUI
 struct EmojiMemoryGameView: View {
     typealias Card = MemoryGame<String>.Card
     @ObservedObject var viewModel: EmojiMemoryGame
+    let cardColor: Color
     
     var body: some View {
         VStack {
-            Text(viewModel.themeName)
-                .font(.largeTitle)
             cards
             Spacer()
-            themeButtons
-            Divider()
-            HStack(alignment: .center) {            
+            HStack(alignment: .center) {
                 score
                 Spacer()
                 shuffleButton
             }
             .overlay {
-                deck.foregroundColor(viewModel.themeColor)
+                deck.foregroundColor(cardColor)
             }
             .font(.title3)
             .padding()
@@ -54,7 +51,7 @@ struct EmojiMemoryGameView: View {
                     }
             }
         }
-        .foregroundColor(viewModel.themeColor)
+        .foregroundColor(cardColor)
     }
     
     @State private var dealt = Set<Card.ID>()
@@ -114,32 +111,6 @@ struct EmojiMemoryGameView: View {
         return card.id == causedByCardId ? amount : 0
     }
     
-    private var themeButtons: some View {
-        HStack(alignment: .bottom, spacing: 0.0) {
-            ForEach(viewModel.themes.indices, id: \.self) { index in
-                let theme = viewModel.themes[index]
-                Button(action: {
-                    viewModel.changeTheme(to: theme)
-                    dealt = Set<Card.ID>()
-                }) {
-                    themeButtonIconAndTextStack(for: theme)    
-                }
-            }
-        }
-    }
-    
-    private func themeButtonIconAndTextStack(for theme: EmojiTheme) -> some View {
-        VStack {
-            Image(systemName: theme.icon)
-                .imageScale(.large)
-                .font(viewModel.isSelected(theme) ? .title : .body)
-            Text(theme.name)
-                .font(.caption2)
-        }
-        .foregroundColor(viewModel.isSelected(theme) ? .green : .blue)
-        .frame(width: Constants.themeButtonWidth)
-    }
-    
     private var shuffleButton: some View {
         Button("Shuffle") {
             withAnimation {
@@ -151,7 +122,6 @@ struct EmojiMemoryGameView: View {
     private struct Constants {
         static let aspectRatio: CGFloat = 2/3
         static let spacing: CGFloat = 4
-        static let themeButtonWidth: CGFloat = 64
         static let deckWidth: CGFloat = 50
         static let dealInterval: TimeInterval = 0.15
         static let dealAnimation: Animation = .easeInOut(duration: 1)
@@ -159,5 +129,5 @@ struct EmojiMemoryGameView: View {
 }
 
 #Preview {
-    EmojiMemoryGameView(viewModel: EmojiMemoryGame())
+    EmojiMemoryGameView(viewModel: EmojiMemoryGame(), cardColor: .green)
 }

@@ -7,58 +7,74 @@
 
 import Foundation
 
-protocol EmojiTheme {
-    var name: String { get }
-    var icon: String { get }
-    var emojis: [String] { get }
-    var nPairs: Int { get }
-    var cardColor: String { get }
-}
-
-struct HalloweenTheme: EmojiTheme {
-    let name = "Halloween"
-    let icon = "person.2"
-    let emojis = ["👻", "🎃", "🕷️", "👺", "🏴‍☠️", "🧌", "👽", "💀", "🧞", "🤖"]
-    let nPairs = 4
-    let cardColor = "orange"
-}
-
-struct HandsTheme: EmojiTheme {
-    let name = "Hands"
-    let icon = "hand.raised"
-    let emojis = ["🫶🏿", "👐🏽", "🫱🏻‍🫲🏽", "✌️", "🖖🏻", "🖕🏾", "🤌", "🤙🏼", "🤜🏿", "👉🏽"]
-    let nPairs = 5
-    let cardColor = "yellow"
-}
-
-struct SportsTheme: EmojiTheme {
-    let name = "Sports"
-    let icon = "soccerball"
-    let emojis = ["⚽️", "🏀", "🏈", "⚾️", "🥌", "🎱", "🏓", "🏒", "⛳️", "🥊"]
-    let nPairs = 6
-    let cardColor = "green"
-}
-
-struct FlagTheme: EmojiTheme {
-    let name = "Flags"
-    let icon = "flag"
-    let emojis = ["🏳️‍🌈", "🇧🇷", "🇨🇦", "🇭🇷", "🇯🇵", "🇪🇸", "🇬🇧", "🇺🇸", "🇵🇹", "🇨🇴"]
-    let nPairs = 7
-    let cardColor = "red"
-}
-
-struct TechTheme: EmojiTheme {
-    let name = "Tech"
-    let icon = "computermouse"
-    let emojis = ["🖨️", "📱", "🕹️", "💽", "💾", "📼", "📺", "📸", "☎️", "⏰", "📡", "💡"]
-    let nPairs = 8
-    let cardColor = "gray"
-}
-
-struct AnimalTheme: EmojiTheme {
-    let name = "Animals"
-    let icon = "lizard"
-    let emojis = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", "🐷"]
-    let nPairs = 9
-    let cardColor = "blue"
+struct EmojiTheme: Codable, Hashable, Identifiable {
+    var name: String
+    var icon: String
+    var emojis: [String]
+    var nPairs: Int
+    var cardColor: String
+    
+    private var uuid = UUID()
+    
+    var id: String {
+        "\(name)-\(icon)-\(emojis.joined())-\(uuid)"
+    }
+    
+    static let new = EmojiTheme(
+        name: "New Theme",
+        icon: "atom",
+        emojis: [String](),
+        nPairs: 0,
+        cardColor: "black"
+    )
+    
+    static let builtins = [halloween, hands, sports, flags, tech, animals]
+    
+    static let halloween = EmojiTheme(
+        name: "Halloween",
+        icon: "person.2",
+        emojis: ["👻", "🎃", "🕷️", "👺", "🏴‍☠️", "🧌", "👽", "💀", "🧞", "🤖"],
+        nPairs: 4,
+        cardColor: "orange"
+    )
+    
+    static let hands = EmojiTheme(
+        name: "Hands",
+        icon: "hand.raised",
+        emojis: ["🫶🏿", "👐🏽", "🫱🏻‍🫲🏽", "✌️", "🖖🏻", "🖕🏾", "🤌", "🤙🏼", "🤜🏿", "👉🏽"],
+        nPairs: 5,
+        cardColor: "yellow"
+    )
+    
+    static let sports = EmojiTheme(
+        name: "Sports",
+        icon: "soccerball",
+        emojis: ["⚽️", "🏀", "🏈", "⚾️", "🥌", "🎱", "🏓", "🏒", "⛳️", "🥊"],
+        nPairs: 6,
+        cardColor: "green"
+    )
+    
+    static let flags = EmojiTheme(
+        name: "Flags",
+        icon: "flag",
+        emojis: ["🏳️‍🌈", "🇧🇷", "🇨🇦", "🇭🇷", "🇯🇵", "🇪🇸", "🇬🇧", "🇺🇸", "🇵🇹", "🇨🇴"],
+        nPairs: 7,
+        cardColor: "red"
+    )
+    
+    static let tech = EmojiTheme(
+        name: "Tech",
+        icon: "computermouse",
+        emojis: ["🖨️", "📱", "🕹️", "💽", "💾", "📼", "📺", "📸", "☎️", "⏰", "📡", "💡"],
+        nPairs: 8,
+        cardColor: "gray"
+    )
+    
+    static let animals = EmojiTheme(
+        name: "Animals",
+        icon: "lizard",
+        emojis: ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", "🐷"],
+        nPairs: 9,
+        cardColor: "blue"
+    )
 }

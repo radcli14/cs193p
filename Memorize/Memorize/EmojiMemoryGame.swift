@@ -9,6 +9,13 @@ import Foundation
 import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
+
+    init(theme: EmojiTheme) {
+        model = EmojiMemoryGame.createMemoryGame(with: theme)
+    }
+    
+    init() {}
+    
     private static func createMemoryGame() -> MemoryGame<String> {
         return createMemoryGame(with: Constants.defaultTheme)
     }
@@ -26,7 +33,7 @@ class EmojiMemoryGame: ObservableObject {
         return game
     }
     
-    @Published private var model = createMemoryGame()
+    @Published private var model = createMemoryGame(with: EmojiTheme.halloween)
     
     typealias Card = MemoryGame<String>.Card
 
@@ -37,43 +44,8 @@ class EmojiMemoryGame: ObservableObject {
     var score: Int {
         return model.score
     }
-    
-    // MARK: - Theming
-    
-    @Published private var theme: EmojiTheme = HalloweenTheme()
-    
-    let themes: [EmojiTheme] = [HalloweenTheme(), HandsTheme(), SportsTheme(), FlagTheme(), TechTheme(), AnimalTheme()]
-    
-    var themeName: String {
-        theme.name
-    }
-    
-    var themeColor: Color {
-        switch theme.cardColor.lowercased() {
-        case "red": return .red
-        case "orange": return .orange
-        case "yellow": return .yellow
-        case "green": return .green
-        case "blue": return .blue
-        case "indigo": return .indigo
-        case "purple": return .purple
-        default: return .gray
-        }
-    }
-    
-    func isSelected(_ themeToCheck: EmojiTheme) -> Bool {
-        return theme.name == themeToCheck.name
-    }
-    
+
     // MARK: - Intents
-    
-    func startNewGame() {
-        var newTheme = themes.randomElement()
-        while newTheme?.name == theme.name {
-            newTheme = themes.randomElement()
-        }
-        changeTheme(to: newTheme ?? Constants.defaultTheme)
-    }
     
     func shuffle() {
         model.shuffle()
@@ -83,14 +55,9 @@ class EmojiMemoryGame: ObservableObject {
         model.choose(card)
     }
     
-    func changeTheme(to theme: EmojiTheme) {
-        self.theme = theme
-        model = EmojiMemoryGame.createMemoryGame(with: theme)
-    }
-    
     // MARK: - Constants
     
     private struct Constants {
-        static let defaultTheme = HalloweenTheme()
+        static let defaultTheme = EmojiTheme.halloween
     }
 }
