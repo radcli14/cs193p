@@ -42,8 +42,22 @@ struct EmojiThemeChooser: View {
     private func menuContent(for theme: EmojiTheme) -> some View {
         HStack {
             Image(systemName: theme.icon)
-            Text(theme.name)
+                .foregroundColor(theme.color)
+                .font(.largeTitle)
+                .frame(width: Constants.iconSize, height: Constants.iconSize)
+            VStack(alignment: .leading) {
+                Text(theme.name)
+                    .font(.title)
+                Text(theme.emojis.joined())
+                    .font(.title3)
+                    .lineLimit(1)
+            }
+            .padding()
         }
+    }
+    
+    private struct Constants {
+        static let iconSize: CGFloat = 36
     }
 }
 
