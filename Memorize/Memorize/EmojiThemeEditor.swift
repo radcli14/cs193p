@@ -40,8 +40,19 @@ struct EmojiThemeEditor: View {
     
     var emojiSection: some View {
         Section(header: Text("Emojis")) {
+            numberOfEmojis
             addEmojis
             removeEmojis
+        }
+    }
+    
+    var numberOfEmojis: some View {
+        Stepper {
+            Text("# of Emojis in Game = \(theme.nPairs)")
+        } onIncrement: {
+            theme.nPairs = min(theme.emojis.count, theme.nPairs + 1)
+        } onDecrement: {
+            theme.nPairs = max(2, theme.nPairs - 1)
         }
     }
     
