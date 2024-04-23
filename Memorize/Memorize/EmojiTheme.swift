@@ -7,12 +7,34 @@
 
 import Foundation
 
+
+struct RGBA: Codable, Equatable, Hashable {
+    let red: Double
+    let green: Double
+    let blue: Double
+    let alpha: Double
+    
+    init(red: Double, green: Double, blue: Double, alpha: Double) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = alpha
+    }
+    
+    init(red: Int, green: Int, blue: Int) {
+        self.red = Double(red) / 255.0
+        self.green = Double(green) / 255.0
+        self.blue = Double(blue) / 255.0
+        self.alpha = 1.0
+    }
+}
+
 struct EmojiTheme: Codable, Hashable, Identifiable {
     var name: String
     var icon: String
     var emojis: String
     var nPairs: Int
-    var cardColor: String
+    var cardColor: RGBA
     
     private var uuid = UUID()
     
@@ -25,7 +47,7 @@ struct EmojiTheme: Codable, Hashable, Identifiable {
         icon: "atom",
         emojis: "",
         nPairs: 0,
-        cardColor: "black"
+        cardColor: RGBA(red: 0, green: 0, blue: 0)
     )
     
     static let builtins = [halloween, hands, sports, flags, tech, animals]
@@ -35,7 +57,7 @@ struct EmojiTheme: Codable, Hashable, Identifiable {
         icon: "person.2",
         emojis: "👻🎃🕷️👺🏴‍☠️🧌👽💀🧞🤖",
         nPairs: 4,
-        cardColor: "orange"
+        cardColor: RGBA(red: 255, green: 149, blue: 0)
     )
     
     static let hands = EmojiTheme(
@@ -43,7 +65,7 @@ struct EmojiTheme: Codable, Hashable, Identifiable {
         icon: "hand.raised",
         emojis: "🫶🏿👐🏽🫱🏻‍🫲🏽✌️🖖🏻🖕🏾🤌🤙🏼🤜🏿👉🏽",
         nPairs: 5,
-        cardColor: "yellow"
+        cardColor: RGBA(red: 255, green: 204, blue: 0)
     )
     
     static let sports = EmojiTheme(
@@ -51,7 +73,7 @@ struct EmojiTheme: Codable, Hashable, Identifiable {
         icon: "soccerball",
         emojis: "⚽️🏀🏈⚾️🥌🎱🏓🏒⛳️🥊",
         nPairs: 6,
-        cardColor: "green"
+        cardColor: RGBA(red: 52, green: 189, blue: 89)
     )
     
     static let flags = EmojiTheme(
@@ -59,7 +81,7 @@ struct EmojiTheme: Codable, Hashable, Identifiable {
         icon: "flag",
         emojis: "🏳️‍🌈🇧🇷🇨🇦🇭🇷🇯🇵🇪🇸🇬🇧🇺🇸🇵🇹🇨🇴",
         nPairs: 7,
-        cardColor: "red"
+        cardColor: RGBA(red: 255, green: 59, blue: 48)
     )
     
     static let tech = EmojiTheme(
@@ -67,7 +89,7 @@ struct EmojiTheme: Codable, Hashable, Identifiable {
         icon: "computermouse",
         emojis: "🖨️📱🕹️💽💾📼📺📸☎️⏰📡💡",
         nPairs: 8,
-        cardColor: "gray"
+        cardColor: RGBA(red: 142, green: 142, blue: 87)
     )
     
     static let animals = EmojiTheme(
@@ -75,6 +97,6 @@ struct EmojiTheme: Codable, Hashable, Identifiable {
         icon: "lizard",
         emojis: "🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🐷",
         nPairs: 9,
-        cardColor: "blue"
+        cardColor: RGBA(red: 0, green: 122, blue: 255)
     )
 }

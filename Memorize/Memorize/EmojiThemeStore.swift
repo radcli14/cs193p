@@ -23,7 +23,10 @@ class EmojiThemeStore: ObservableObject {
     }
     
     var themeColor: Color {
-        theme?.color ?? .gray
+        if let color = theme?.cardColor {
+            return Color(rgba: color)
+        }
+        return .gray
     }
     
     func isSelected(_ themeToCheck: EmojiTheme) -> Bool {
@@ -55,15 +58,23 @@ class EmojiThemeStore: ObservableObject {
 
 extension EmojiTheme {
     var color: Color {
-        switch cardColor.lowercased() {
-        case "red": return .red
-        case "orange": return .orange
-        case "yellow": return .yellow
-        case "green": return .green
-        case "blue": return .blue
-        case "indigo": return .indigo
-        case "purple": return .purple
-        default: return .gray
-        }
+        Color(rgba: cardColor)
+    }
+}
+
+extension Color {
+    init(rgba: RGBA) {
+        self.init(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.alpha)
+    }
+}
+
+extension RGBA {
+    init(color: Color) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        UIColor(color).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        self.init(red: Double(red), green: Double(green), blue: Double(blue), alpha: Double(alpha))
     }
 }

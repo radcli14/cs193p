@@ -10,7 +10,13 @@ import SwiftUI
 struct EmojiThemeEditor: View {
     @Binding var theme: EmojiTheme
     
+    init(theme: Binding<EmojiTheme>) {
+        _theme = theme
+        color = Color(rgba: theme.wrappedValue.cardColor)
+    }
+    
     @State private var emojisToAdd: String = ""
+    @State private var color: Color
     
     enum Focused {
         case name
@@ -30,9 +36,14 @@ struct EmojiThemeEditor: View {
     }
     
     var nameSection: some View {
-        Section(header: Text("Name")) {
+        Section(header: Text("Display")) {
             TextField("Name", text: $theme.name)
+                .font(.title)
                 .focused($focused, equals: .name)
+            ColorPicker("Card Color", selection: $color)
+                .onChange(of: color) {
+                    theme.cardColor = RGBA(color: color)
+                }
         }
     }
     
