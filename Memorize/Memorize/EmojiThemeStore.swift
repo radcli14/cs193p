@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 class EmojiThemeStore: ObservableObject {
-    let themes = EmojiTheme.builtins
+    @Published var themes = EmojiTheme.builtins
     
     var selectedThemeIndex: Array<EmojiTheme>.Index?
     
@@ -28,6 +28,10 @@ class EmojiThemeStore: ObservableObject {
     
     func isSelected(_ themeToCheck: EmojiTheme) -> Bool {
         return theme?.id == themeToCheck.id
+    }
+    
+    func newTheme() {
+        themes.insert(EmojiTheme.new, at: 0)
     }
 }
 

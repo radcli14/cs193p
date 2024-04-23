@@ -37,6 +37,9 @@ struct EmojiThemeChooser: View {
             }
         }
         .navigationTitle("Themes")
+        .toolbar {
+            newThemeButton
+        }
     }
     
     private func menuContent(for theme: EmojiTheme) -> some View {
@@ -55,6 +58,21 @@ struct EmojiThemeChooser: View {
             .padding()
         }
     }
+    
+    private var newThemeButton: some View {
+        Button(action: {
+            withAnimation {
+                viewModel.newTheme()
+            }
+        }) {
+            HStack {
+                Image(systemName: "plus")
+                Text("Add Theme")
+            }
+        }
+    }
+    
+    // MARK: - Constants
     
     private struct Constants {
         static let iconSize: CGFloat = 36
