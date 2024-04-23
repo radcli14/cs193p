@@ -24,6 +24,8 @@
 		8A8470D02B769D650075F015 /* FlyingNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8470CF2B769D650075F015 /* FlyingNumber.swift */; };
 		8AC1E60E2BD6B298000BBA08 /* EmojiThemeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1E60D2BD6B298000BBA08 /* EmojiThemeStore.swift */; };
 		8AC1E6102BD6B50B000BBA08 /* EmojiThemeChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1E60F2BD6B50A000BBA08 /* EmojiThemeChooser.swift */; };
+		8AC1E6122BD8187C000BBA08 /* EmojiThemeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1E6112BD8187C000BBA08 /* EmojiThemeEditor.swift */; };
+		8AC1E6142BD82182000BBA08 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1E6132BD82182000BBA08 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,8 @@
 		8A8470CF2B769D650075F015 /* FlyingNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyingNumber.swift; sourceTree = "<group>"; };
 		8AC1E60D2BD6B298000BBA08 /* EmojiThemeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiThemeStore.swift; sourceTree = "<group>"; };
 		8AC1E60F2BD6B50A000BBA08 /* EmojiThemeChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiThemeChooser.swift; sourceTree = "<group>"; };
+		8AC1E6112BD8187C000BBA08 /* EmojiThemeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiThemeEditor.swift; sourceTree = "<group>"; };
+		8AC1E6132BD82182000BBA08 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,11 +125,13 @@
 				8A1D2C8A2B518849006C8922 /* EmojiTheme.swift */,
 				8AC1E60D2BD6B298000BBA08 /* EmojiThemeStore.swift */,
 				8AC1E60F2BD6B50A000BBA08 /* EmojiThemeChooser.swift */,
+				8AC1E6112BD8187C000BBA08 /* EmojiThemeEditor.swift */,
 				8A8470CF2B769D650075F015 /* FlyingNumber.swift */,
 				8A1D2CCE2B5ED5DD006C8922 /* CardView.swift */,
 				8A1D2CD22B5EE57A006C8922 /* Cardify.swift */,
 				8A1D2CD02B5EDE8B006C8922 /* Pie.swift */,
 				8A1D2C8C2B5ACE05006C8922 /* AspectVGrid.swift */,
+				8AC1E6132BD82182000BBA08 /* Extensions.swift */,
 				8A1D2C602B4F0171006C8922 /* Assets.xcassets */,
 				8A1D2C622B4F0171006C8922 /* Preview Content */,
 			);
@@ -298,7 +304,9 @@
 				8A1D2CD12B5EDE8B006C8922 /* Pie.swift in Sources */,
 				8A1D2C872B5039F4006C8922 /* MemoryGame.swift in Sources */,
 				8A1D2C892B503BD9006C8922 /* EmojiMemoryGame.swift in Sources */,
+				8AC1E6122BD8187C000BBA08 /* EmojiThemeEditor.swift in Sources */,
 				8A8470D02B769D650075F015 /* FlyingNumber.swift in Sources */,
+				8AC1E6142BD82182000BBA08 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

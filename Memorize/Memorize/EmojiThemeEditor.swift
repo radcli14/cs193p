@@ -1,0 +1,88 @@
+//
+//  EmojiThemeEditor.swift
+//  Memorize
+//
+//  Created by Eliott Radcliffe on 4/23/24.
+//
+
+import SwiftUI
+
+struct EmojiThemeEditor: View {
+    @Binding var theme: EmojiTheme
+    
+    @State private var emojisToAdd: String = ""
+    
+    enum Focused {
+        case name
+        case addEmojis
+    }
+    
+    @FocusState private var focused: Focused?
+    
+    var body: some View {
+        Form {
+            nameSection
+            emojiSection
+        }
+        .onAppear {
+            focused = theme.name.isEmpty || theme.name == "New Theme" ? .name : .addEmojis
+        }
+    }
+    
+    var nameSection: some View {
+        Section(header: Text("Name")) {
+            TextField("Name", text: $theme.name)
+                .focused($focused, equals: .name)
+        }
+    }
+    
+    // MARK: - Emoji Section
+    
+    var emojiSection: some View {
+        Section(header: Text("Emojis")) {
+            addEmojis
+            removeEmojis
+        }
+    }
+    
+    var addEmojis: some View {
+        TextField("Add Emojis Here", text: $emojisToAdd)
+            .focused($focused, equals: .addEmojis)
+            .font(emojiFont)
+            .onChange(of: emojisToAdd) {
+                theme.emojis = (emojisToAdd + theme.emojis)
+                    .filter { $0.isEmoji }
+                    .uniqued
+            }
+    }
+    
+    var removeEmojis: some View {
+        VStack(alignment: .trailing) {
+            Text("Tap to Remove Emojis")
+                .font(.caption)
+                .foregroundColor(.gray)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))]) {
+                ForEach(theme.emojis.uniqued.map(String.init), id: \.self) { emoji in
+                    Text(emoji)
+                        .font(emojiFont)
+                        .onTapGesture {
+                            withAnimation {
+                                theme.emojis.remove(emoji.first!)
+                                emojisToAdd.remove(emoji.first!)
+                            }
+                        }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Constants
+    
+    private let emojiFont = Font.system(size: 40)
+}
+
+/*
+#Preview {
+    EmojiThemeEditor(theme: EmojiTheme.new)
+}
+*/

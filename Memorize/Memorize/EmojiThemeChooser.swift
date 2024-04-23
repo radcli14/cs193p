@@ -9,16 +9,7 @@ import SwiftUI
 
 struct EmojiThemeChooser: View {
     @ObservedObject var viewModel: EmojiThemeStore
-    @State var selectedThemeForEditing: EmojiTheme?
-    var showThemeEditor: Binding<Bool> {
-        Binding {
-            selectedThemeForEditing != nil
-        } set: { conditional in
-            if !conditional {
-                selectedThemeForEditing = nil
-            }
-        }
-    }
+    @State private var showThemeEditor = false
     
     // MARK: - Body
     
@@ -33,8 +24,12 @@ struct EmojiThemeChooser: View {
                     newThemeButton
                 }
         }
-        .sheet(isPresented: showThemeEditor) {
-            Text(selectedThemeForEditing?.name ?? "got nothin")
+        .sheet(isPresented: $showThemeEditor, onDismiss: {
+            viewModel.unselectTheme()
+        }) {
+            if let index = viewModel.selectedThemeIndex {
+                EmojiThemeEditor(theme: $viewModel.themes[index])
+            }
         }
     }
     
@@ -62,7 +57,7 @@ struct EmojiThemeChooser: View {
             VStack(alignment: .leading) {
                 Text(theme.name)
                     .font(.title)
-                Text(theme.emojis.joined())
+                Text(theme.emojis)
                     .font(.title3)
                     .lineLimit(1)
             }
@@ -108,7 +103,8 @@ struct EmojiThemeChooser: View {
     
     private func editThemeSwipeActionButton(for theme: EmojiTheme) -> some View {
         Button {
-            selectedThemeForEditing = theme
+            viewModel.select(theme)
+            showThemeEditor = true
         } label: {
             Label("Edit", systemImage: "pencil")
         }
