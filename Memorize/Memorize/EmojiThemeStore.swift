@@ -8,8 +8,32 @@
 import Foundation
 import SwiftUI
 
+/// Persistence for the list of `EmojiTheme`
+extension [EmojiTheme] {
+    func json() throws -> Data {
+        let encoded = try JSONEncoder().encode(self)
+        print("Themes = \(String(data: encoded, encoding: .utf8) ?? "nil")")
+        return encoded
+    }
+    
+    init(json: Data) throws {
+        self = try JSONDecoder().decode([EmojiTheme].self, from: json)
+    }
+}
+
 class EmojiThemeStore: ObservableObject {
-    @Published var themes = EmojiTheme.builtins
+    init() {
+        if let data = try? Data(contentsOf: autosaveURL),
+            let autosavedThemes = try? [EmojiTheme](json: data) {
+            themes = autosavedThemes
+        }
+    }
+    
+    @Published var themes = EmojiTheme.builtins {
+        didSet {
+            autosave()
+        }
+    }
     
     var selectedThemeIndex: Array<EmojiTheme>.Index?
     
@@ -31,6 +55,24 @@ class EmojiThemeStore: ObservableObject {
     
     func isSelected(_ themeToCheck: EmojiTheme) -> Bool {
         return theme?.id == themeToCheck.id
+    }
+    
+    // MARK: - Persistence
+    
+    private let autosaveURL: URL = URL.documentsDirectory.appendingPathComponent("Autosaved.emojithemes")
+    
+    private func autosave() {
+        save(to: autosaveURL)
+        print("autosaved to \(autosaveURL)")
+    }
+    
+    private func save(to url: URL) {
+        do {
+            let data = try themes.json()
+            try data.write(to: url)
+        } catch let error {
+            print("Themes: error while saving \(error.localizedDescription)")
+        }
     }
     
     // MARK: - Intents
