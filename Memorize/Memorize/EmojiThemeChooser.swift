@@ -9,12 +9,32 @@ import SwiftUI
 
 struct EmojiThemeChooser: View {
     @ObservedObject var viewModel: EmojiThemeStore
-    @State var selectedTheme: EmojiTheme?
-    @StateObject var game = EmojiMemoryGame()
+    @State var selectedThemeForEditing: EmojiTheme?
+    var showThemeEditor: Binding<Bool> {
+        Binding {
+            selectedThemeForEditing != nil
+        } set: { conditional in
+            if !conditional {
+                selectedThemeForEditing = nil
+            }
+        }
+    }
+    
+    // MARK: - Body
     
     var body: some View {
         NavigationStack {
             themeList
+                .navigationDestination(for: EmojiTheme.ID.self) { themeId in
+                    gameView(for: themeId)
+                }
+                .navigationTitle("Themes")
+                .toolbar {
+                    newThemeButton
+                }
+        }
+        .sheet(isPresented: showThemeEditor) {
+            Text(selectedThemeForEditing?.name ?? "got nothin")
         }
     }
     
@@ -24,21 +44,12 @@ struct EmojiThemeChooser: View {
                 NavigationLink(value: theme.id) {
                     menuContent(for: theme)
                         .tag(theme)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            deleteThemeSwipeActionButton(for: theme)
+                            editThemeSwipeActionButton(for: theme)
+                        }
                 }
             }
-        }
-        .navigationDestination(for: EmojiTheme.ID.self) { themeId in
-            if let index = viewModel.themes.firstIndex(where: { $0.id == themeId }) {
-                EmojiMemoryGameView(
-                    viewModel: EmojiMemoryGame(theme: viewModel.themes[index]), 
-                    cardColor: viewModel.themes[index].color
-                )
-                .navigationTitle(viewModel.themes[index].name)
-            }
-        }
-        .navigationTitle("Themes")
-        .toolbar {
-            newThemeButton
         }
     }
     
@@ -59,6 +70,19 @@ struct EmojiThemeChooser: View {
         }
     }
     
+    @ViewBuilder
+    private func gameView(for themeId: EmojiTheme.ID) -> some View {
+        if let index = viewModel.themes.firstIndex(where: { $0.id == themeId }) {
+            EmojiMemoryGameView(
+                viewModel: EmojiMemoryGame(theme: viewModel.themes[index]),
+                cardColor: viewModel.themes[index].color
+            )
+            .navigationTitle(viewModel.themes[index].name)
+        }
+    }
+    
+    // MARK: - Buttons
+    
     private var newThemeButton: some View {
         Button(action: {
             withAnimation {
@@ -69,6 +93,24 @@ struct EmojiThemeChooser: View {
                 Image(systemName: "plus")
                 Text("Add Theme")
             }
+        }
+    }
+    
+    private func deleteThemeSwipeActionButton(for theme: EmojiTheme) -> some View {
+        Button(role: .destructive) {
+            withAnimation {
+                viewModel.remove(theme)
+            }
+        } label: {
+            Label("Delete", systemImage: "trash")
+        }
+    }
+    
+    private func editThemeSwipeActionButton(for theme: EmojiTheme) -> some View {
+        Button {
+            selectedThemeForEditing = theme
+        } label: {
+            Label("Edit", systemImage: "pencil")
         }
     }
     

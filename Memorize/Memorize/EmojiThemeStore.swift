@@ -33,6 +33,12 @@ class EmojiThemeStore: ObservableObject {
     func newTheme() {
         themes.insert(EmojiTheme.new, at: 0)
     }
+    
+    func remove(_ theme: EmojiTheme) {
+        if let index = themes.firstIndex(where: { $0.id == theme.id }) {
+            themes.remove(at: index)
+        }
+    }
 }
 
 extension EmojiTheme {
