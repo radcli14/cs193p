@@ -10,7 +10,10 @@ import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
 
+    private var theme = Constants.defaultTheme
+    
     init(theme: EmojiTheme) {
+        self.theme = theme
         model = EmojiMemoryGame.createMemoryGame(with: theme)
     }
     
@@ -33,7 +36,7 @@ class EmojiMemoryGame: ObservableObject {
         return game
     }
     
-    @Published private var model = createMemoryGame(with: EmojiTheme.halloween)
+    @Published private var model = createMemoryGame(with: Constants.defaultTheme)
     
     typealias Card = MemoryGame<String>.Card
 
@@ -46,6 +49,10 @@ class EmojiMemoryGame: ObservableObject {
     }
 
     // MARK: - Intents
+    
+    func newGame() {
+        model = EmojiMemoryGame.createMemoryGame(with: theme)
+    }
     
     func shuffle() {
         model.shuffle()

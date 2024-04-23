@@ -23,6 +23,9 @@ struct EmojiMemoryGameView: View {
             }
             .overlay {
                 deck.foregroundColor(cardColor)
+                if undealtCards.isEmpty {
+                    newButton
+                }
             }
             .font(.title3)
             .padding()
@@ -83,6 +86,18 @@ struct EmojiMemoryGameView: View {
         .onTapGesture {
             deal()
         }
+    }
+    
+    private var newButton: some View {
+        Button(action: {
+            withAnimation {
+                dealt.removeAll()
+                viewModel.newGame()
+            }
+        }) {
+            Text("New")
+        }
+        .buttonStyle(BorderedButtonStyle())
     }
     
     private func deal() {
