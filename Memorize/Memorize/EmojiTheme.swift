@@ -33,6 +33,7 @@ struct EmojiTheme: Codable, Hashable, Identifiable {
     var name: String
     var icon: String
     var emojis: String
+    var removedEmojis: String = ""
     var nPairs: Int
     var cardColor: RGBA
     

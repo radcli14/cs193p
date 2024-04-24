@@ -146,20 +146,52 @@ struct EmojiThemeEditor: View {
     
     private var removeEmojis: some View {
         VStack(alignment: .trailing) {
-            Text("Tap to Remove Emojis")
-                .font(.caption)
-                .foregroundColor(.gray)
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: iconSize))]) {
-                ForEach(theme.emojis.uniqued.map(String.init), id: \.self) { emoji in
-                    Text(emoji)
-                        .font(emojiFont)
-                        .onTapGesture {
-                            withAnimation {
-                                theme.emojis.remove(emoji.first!)
-                                emojisToAdd.remove(emoji.first!)
-                            }
+            menuToRemoveEmojis
+            if !theme.removedEmojis.isEmpty {
+                menuToAddRemovedEmojisBackIn
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var menuToRemoveEmojis: some View {
+        Text("Tap to Remove Emojis")
+            .font(.caption)
+            .foregroundColor(.gray)
+        emojiSelectionGrid(for: theme.emojis) { emoji in
+            if let firstCharacter = emoji.first {
+                theme.emojis.remove(firstCharacter)
+                emojisToAdd.remove(firstCharacter)
+                theme.removedEmojis.append(firstCharacter)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var menuToAddRemovedEmojisBackIn: some View {
+        Text("Removed Emojis (Tap to Add Back)")
+            .font(.caption)
+            .foregroundColor(.gray)
+        emojiSelectionGrid(for: theme.removedEmojis) { emoji in
+            if let firstCharacter = emoji.first {
+                theme.removedEmojis.remove(firstCharacter)
+                theme.emojis = (emoji + theme.emojis)
+                    .filter { $0.isEmoji }
+                    .uniqued
+            }
+        }
+    }
+    
+    private func emojiSelectionGrid(for emojis: String, onTapAction: @escaping (String) -> Void) -> some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: iconSize))]) {
+            ForEach(emojis.uniqued.map(String.init), id: \.self) { emoji in
+                Text(emoji)
+                    .font(emojiFont)
+                    .onTapGesture {
+                        withAnimation {
+                            onTapAction(emoji)
                         }
-                }
+                    }
             }
         }
     }
