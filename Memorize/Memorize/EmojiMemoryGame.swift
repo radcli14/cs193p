@@ -10,17 +10,14 @@ import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
 
-    private var theme = Constants.defaultTheme
+    let theme: EmojiTheme
+    @Published private var model: MemoryGame<String>
+
+    // MARK: - Initialization
     
     init(theme: EmojiTheme) {
         self.theme = theme
         model = EmojiMemoryGame.createMemoryGame(with: theme)
-    }
-    
-    init() {}
-    
-    private static func createMemoryGame() -> MemoryGame<String> {
-        return createMemoryGame(with: Constants.defaultTheme)
     }
     
     private static func createMemoryGame(with theme: EmojiTheme) -> MemoryGame<String> {
@@ -36,8 +33,8 @@ class EmojiMemoryGame: ObservableObject {
         return game
     }
     
-    @Published private var model = createMemoryGame(with: Constants.defaultTheme)
-    
+    // MARK: - Game Info
+
     typealias Card = MemoryGame<String>.Card
 
     var cards: Array<Card> {
@@ -47,7 +44,11 @@ class EmojiMemoryGame: ObservableObject {
     var score: Int {
         return model.score
     }
-
+    
+    var color: Color {
+        Color(rgba: theme.cardColor)
+    }
+    
     // MARK: - Intents
     
     func newGame() {
@@ -60,11 +61,5 @@ class EmojiMemoryGame: ObservableObject {
     
     func choose(_ card: Card) {
         model.choose(card)
-    }
-    
-    // MARK: - Constants
-    
-    private struct Constants {
-        static let defaultTheme = EmojiTheme.halloween
     }
 }

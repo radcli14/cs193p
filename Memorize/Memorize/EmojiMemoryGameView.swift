@@ -10,8 +10,7 @@ import SwiftUI
 struct EmojiMemoryGameView: View {
     typealias Card = MemoryGame<String>.Card
     @ObservedObject var viewModel: EmojiMemoryGame
-    let cardColor: Color
-    
+
     var body: some View {
         VStack {
             cards
@@ -22,7 +21,7 @@ struct EmojiMemoryGameView: View {
                 shuffleButton
             }
             .overlay {
-                deck.foregroundColor(cardColor)
+                deck.foregroundColor(viewModel.color)
                 if undealtCards.isEmpty {
                     newButton
                 }
@@ -54,7 +53,7 @@ struct EmojiMemoryGameView: View {
                     }
             }
         }
-        .foregroundColor(cardColor)
+        .foregroundColor(viewModel.color)
     }
     
     @State private var dealt = Set<Card.ID>()
@@ -144,5 +143,5 @@ struct EmojiMemoryGameView: View {
 }
 
 #Preview {
-    EmojiMemoryGameView(viewModel: EmojiMemoryGame(), cardColor: .green)
+    EmojiMemoryGameView(viewModel: EmojiMemoryGame(theme: EmojiTheme.halloween))
 }

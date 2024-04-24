@@ -69,8 +69,7 @@ struct EmojiThemeChooser: View {
     private func gameView(for themeId: EmojiTheme.ID) -> some View {
         if let index = viewModel.themes.firstIndex(where: { $0.id == themeId }) {
             EmojiMemoryGameView(
-                viewModel: EmojiMemoryGame(theme: viewModel.themes[index]),
-                cardColor: viewModel.themes[index].color
+                viewModel: EmojiMemoryGame(theme: viewModel.themes[index])
             )
             .navigationTitle(viewModel.themes[index].name)
         }
