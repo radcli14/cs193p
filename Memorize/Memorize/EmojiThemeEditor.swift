@@ -15,6 +15,8 @@ struct EmojiThemeEditor: View {
         color = Color(rgba: theme.wrappedValue.cardColor)
     }
     
+    @State private var icon = ""
+    @State private var iconSelectorMenuIsVisible = false
     @State private var emojisToAdd: String = ""
     @State private var color: Color
     
@@ -27,7 +29,7 @@ struct EmojiThemeEditor: View {
     
     var body: some View {
         Form {
-            nameSection
+            displaySection
             emojiSection
         }
         .onAppear {
@@ -35,21 +37,85 @@ struct EmojiThemeEditor: View {
         }
     }
     
-    var nameSection: some View {
+    // MARK: - Display Section
+    
+    var displaySection: some View {
         Section(header: Text("Display")) {
-            TextField("Name", text: $theme.name)
-                .font(.title)
-                .focused($focused, equals: .name)
-            ColorPicker("Card Color", selection: $color)
-                .onChange(of: color) {
-                    theme.cardColor = RGBA(color: color)
-                }
+            nameTextField
+            HStack {
+                iconSelector
+                Divider()
+                colorPicker
+                Spacer()
+            }
         }
+    }
+    
+    var nameTextField: some View {
+        TextField("Name", text: $theme.name)
+            .font(.title)
+            .focused($focused, equals: .name)
+    }
+    
+    var iconSelector: some View {
+        Label {
+            Text("Icon")
+        } icon: {
+            Image(systemName: theme.icon)
+                .foregroundColor(theme.color)
+        }
+        .popover(isPresented: $iconSelectorMenuIsVisible) {
+            iconSelectorMenu
+        }
+        .onTapGesture {
+            withAnimation {
+                iconSelectorMenuIsVisible = true
+            }
+        }
+    }
+    
+    var iconSelectorMenu: some View {
+        VStack {
+            Text("Select an Icon")
+                .font(.title)
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: iconSize))],
+                spacing: iconSpacing
+            ){
+                ForEach(EmojiTheme.availableIcons, id: \.self) { icon in
+                    iconSelectorButton(for: icon)
+                }
+            }
+        }
+        .frame(width: iconMenuWidth)
+        .padding()
+    }
+    
+    @ViewBuilder
+    private func iconSelectorButton(for icon: String) -> some View {
+        if icon != theme.icon {
+            Button {
+                withAnimation {
+                    theme.icon = icon
+                    iconSelectorMenuIsVisible = false
+                }
+            } label: {
+                Image(systemName: icon)
+                    .font(.largeTitle)
+            }
+        }
+    }
+    
+    private var colorPicker: some View {
+        ColorPicker("Card Color", selection: $color)
+            .onChange(of: color) {
+                theme.cardColor = RGBA(color: color)
+            }
     }
     
     // MARK: - Emoji Section
     
-    var emojiSection: some View {
+    private var emojiSection: some View {
         Section(header: Text("Emojis")) {
             numberOfEmojis
             addEmojis
@@ -57,7 +123,7 @@ struct EmojiThemeEditor: View {
         }
     }
     
-    var numberOfEmojis: some View {
+    private var numberOfEmojis: some View {
         Stepper {
             Text("# of Emojis in Game = \(theme.nPairs)")
         } onIncrement: {
@@ -67,7 +133,7 @@ struct EmojiThemeEditor: View {
         }
     }
     
-    var addEmojis: some View {
+    private var addEmojis: some View {
         TextField("Add Emojis Here", text: $emojisToAdd)
             .focused($focused, equals: .addEmojis)
             .font(emojiFont)
@@ -78,12 +144,12 @@ struct EmojiThemeEditor: View {
             }
     }
     
-    var removeEmojis: some View {
+    private var removeEmojis: some View {
         VStack(alignment: .trailing) {
             Text("Tap to Remove Emojis")
                 .font(.caption)
                 .foregroundColor(.gray)
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))]) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: iconSize))]) {
                 ForEach(theme.emojis.uniqued.map(String.init), id: \.self) { emoji in
                     Text(emoji)
                         .font(emojiFont)
@@ -101,6 +167,9 @@ struct EmojiThemeEditor: View {
     // MARK: - Constants
     
     private let emojiFont = Font.system(size: 40)
+    private let iconSize: CGFloat = 60
+    private let iconSpacing: CGFloat = 12
+    private let iconMenuWidth: CGFloat = 360
 }
 
 /*

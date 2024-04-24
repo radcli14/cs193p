@@ -10,7 +10,7 @@ import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
 
-    let theme: EmojiTheme
+    private let theme: EmojiTheme
     @Published private var model: MemoryGame<String>
 
     // MARK: - Initialization

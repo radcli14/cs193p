@@ -99,4 +99,38 @@ struct EmojiTheme: Codable, Hashable, Identifiable {
         nPairs: 9,
         cardColor: RGBA(red: 0, green: 122, blue: 255)
     )
+    
+    static let availableIcons = [
+        "scribble.variable",
+        "pencil.tip.crop.circle",
+        "paperplane.fill",
+        "doc",
+        "lizard",
+        "computermouse",
+        "flag",
+        "soccerball",
+        "hand.raised",
+        "person.2",
+        "atom",
+        "pencil.and.list.clipboard",
+        "book",
+        "books.vertical",
+        "graduationcap",
+        "photo.artframe",
+        "figure.fall",
+        "figure.hockey",
+        "sportscourt",
+        "globe.americas",
+        "sun.max",
+        "sparkles",
+        "cloud.bolt",
+        "hurricane",
+        "flame",
+        "umbrella",
+        "infinity",
+        "music.note.list",
+        "app.gift",
+        "fleuron",
+        "flag.checkered"
+    ]
 }
