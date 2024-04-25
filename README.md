@@ -3,9 +3,9 @@ Homework exercises for the spring 2023 Stanford [CS193p](https://cs193p.sites.st
 
 ## Memorize! and Set
 
-| Memorize!                                     | Set                                      |
-|-----------------------------------------------|------------------------------------------|
-| <img src="images/memorize.gif" width="128px"> | <img src="images/set.gif" width="128px"> |
+| Memorize!                                        | Set                                      |
+|--------------------------------------------------|------------------------------------------|
+| <img src="images/memorizePA6.gif" width="128px"> | <img src="images/set.gif" width="128px"> |
 
 A few of the important concepts that I learned in this segment of the course:
 - Pinning a view preview in XCode to keep it on-screen when changing scripts you are editing
