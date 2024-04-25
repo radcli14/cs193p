@@ -56,10 +56,10 @@ struct EmojiMemoryGameView: View {
         .foregroundColor(viewModel.color)
     }
     
-    @State private var dealt = Set<Card.ID>()
+    //@State private var dealt = Set<Card.ID>()
     
     private func isDealt(_ card: Card) -> Bool {
-        dealt.contains(card.id)
+        viewModel.dealt.contains(card.id)
     }
     
     private var undealtCards: [Card] {
@@ -90,7 +90,6 @@ struct EmojiMemoryGameView: View {
     private var newButton: some View {
         Button(action: {
             withAnimation {
-                dealt.removeAll()
                 viewModel.newGame()
             }
         }) {
@@ -103,7 +102,7 @@ struct EmojiMemoryGameView: View {
         var delay: TimeInterval = 0
         for card in viewModel.cards {
             withAnimation(Constants.dealAnimation.delay(delay)) {
-                _ = dealt.insert(card.id)
+                viewModel.dealCard(with: card.id)
             }
             delay += Constants.dealInterval
         }

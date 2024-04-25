@@ -10,7 +10,7 @@ import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
 
-    private let theme: EmojiTheme
+    private var theme: EmojiTheme
     @Published private var model: MemoryGame<String>
 
     // MARK: - Initialization
@@ -37,6 +37,12 @@ class EmojiMemoryGame: ObservableObject {
 
     typealias Card = MemoryGame<String>.Card
 
+    @Published var dealt = Set<Card.ID>()
+    
+    var name: String {
+        return theme.name
+    }
+    
     var cards: Array<Card> {
         return model.cards
     }
@@ -51,8 +57,24 @@ class EmojiMemoryGame: ObservableObject {
     
     // MARK: - Intents
     
+    func updateTheme(to newTheme: EmojiTheme) {
+        theme = newTheme
+    }
+    
     func newGame() {
+        dealt.removeAll()
         model = EmojiMemoryGame.createMemoryGame(with: theme)
+    }
+    
+    func dealCard(with cardId: Card.ID) {
+        _ = dealt.insert(cardId)
+    }
+    
+    /// Assure that there is not a partial deal when you navigate away from the game and back
+    func makeSureAllCardsAreDealtIfAnyAreDealt() {
+        if dealt.count > 0 {
+            dealt = Set(cards.map { $0.id })
+        }
     }
     
     func shuffle() {

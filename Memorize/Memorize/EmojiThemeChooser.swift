@@ -16,6 +16,12 @@ struct EmojiThemeChooser: View {
     var body: some View {
         navigationSplitView
             .sheet(isPresented: $showThemeEditor, onDismiss: {
+                // Make sure that when you stop editing the theme, the changes get
+                // passed to the gameViewModel for that theme
+                if let index = viewModel.selectedThemeIndex,
+                   let gameViewModel = gameViewModels[viewModel.themes[index].id] {
+                    gameViewModel.updateTheme(to: viewModel.themes[index])
+                }
                 viewModel.unselectTheme()
             }) {
                 if let index = viewModel.selectedThemeIndex {
@@ -40,9 +46,28 @@ struct EmojiThemeChooser: View {
             }
         }
         .onChange(of: selectedGameThemeId) {
-            if selectedGameThemeId != nil {
+            if let selectedGameThemeId {
                 splitViewVisibility = .detailOnly
+                initializeGameViewModel(for: selectedGameThemeId)
             }
+        }
+    }
+    
+    /// Add game view models to the state dictionary so if you navigate away from the game, you can return to the same state
+    private func initializeGameViewModel(for themeId: EmojiTheme.ID) {
+        if let index = viewModel.themes.firstIndex(
+            where: { $0.id == selectedGameThemeId }
+        ), !gameViewModels.keys.contains(themeId) {
+            // Only add in the case that you received a valid index, and
+            // the theme does not already exist in the gameViewModels dict
+            gameViewModels[themeId] = EmojiMemoryGame(
+                theme: viewModel.themes[index]
+            )
+        }
+        
+        // If we navigated to this theme after a partial deal, complete the deal
+        if let gameViewModel = gameViewModels[themeId] {
+            gameViewModel.makeSureAllCardsAreDealtIfAnyAreDealt()
         }
     }
     
@@ -67,10 +92,14 @@ struct EmojiThemeChooser: View {
 
     private func menuContent(for theme: EmojiTheme) -> some View {
         HStack {
-            Image(systemName: theme.icon)
-                .foregroundColor(theme.color)
-                .font(.largeTitle)
-                .frame(width: Constants.iconSize, height: Constants.iconSize)
+            VStack {
+                Image(systemName: theme.icon)
+                    .foregroundColor(theme.color)
+                    .font(.title)
+                    .frame(width: Constants.iconSize, height: Constants.iconSize)
+                Text("\(theme.nPairs) pairs")
+                    .font(.caption)
+            }
             VStack(alignment: .leading) {
                 Text(theme.name)
                     .font(.title)
@@ -84,9 +113,14 @@ struct EmojiThemeChooser: View {
     
     // MARK: - Game
     
+    @State var gameViewModels = [EmojiTheme.ID: EmojiMemoryGame]()
+    
     @ViewBuilder
     private func gameView(for themeId: EmojiTheme.ID) -> some View {
-        if let index = viewModel.themes.firstIndex(where: { $0.id == themeId }) {
+        if let gameViewModel = gameViewModels[themeId] {
+            EmojiMemoryGameView(viewModel: gameViewModel)
+                .navigationTitle(gameViewModel.name)
+        } else if let index = viewModel.themes.firstIndex(where: { $0.id == themeId }) {
             EmojiMemoryGameView(
                 viewModel: EmojiMemoryGame(theme: viewModel.themes[index])
             )
