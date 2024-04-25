@@ -14,40 +14,57 @@ struct EmojiThemeChooser: View {
     // MARK: - Body
     
     var body: some View {
-        NavigationStack {
+        navigationSplitView
+            .sheet(isPresented: $showThemeEditor, onDismiss: {
+                viewModel.unselectTheme()
+            }) {
+                if let index = viewModel.selectedThemeIndex {
+                    EmojiThemeEditor(theme: $viewModel.themes[index])
+                }
+            }
+    }
+    
+    // MARK: - Navigation
+    
+    @State private var splitViewVisibility: NavigationSplitViewVisibility = .all
+    @State private var selectedGameThemeId: EmojiTheme.ID?
+    
+    var navigationSplitView: some View {
+        NavigationSplitView(columnVisibility: $splitViewVisibility) {
             themeList
-                .navigationDestination(for: EmojiTheme.ID.self) { themeId in
-                    gameView(for: themeId)
-                }
-                .navigationTitle("Themes")
-                .toolbar {
-                    newThemeButton
-                }
+        } detail: {
+            if let themeId = selectedGameThemeId {
+                gameView(for: themeId)
+            } else {
+                Text("Select a theme to play")
+            }
         }
-        .sheet(isPresented: $showThemeEditor, onDismiss: {
-            viewModel.unselectTheme()
-        }) {
-            if let index = viewModel.selectedThemeIndex {
-                EmojiThemeEditor(theme: $viewModel.themes[index])
+        .onChange(of: selectedGameThemeId) {
+            if selectedGameThemeId != nil {
+                splitViewVisibility = .detailOnly
             }
         }
     }
+    
+    // MARK: - Theme Menu
     
     private var themeList: some View {
-        List {
-            ForEach(viewModel.themes) { theme in
-                NavigationLink(value: theme.id) {
-                    menuContent(for: theme)
-                        .tag(theme)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            deleteThemeSwipeActionButton(for: theme)
-                            editThemeSwipeActionButton(for: theme)
-                        }
-                }
+        List(viewModel.themes, selection: $selectedGameThemeId) { theme in
+            NavigationLink(value: theme.id) {
+                menuContent(for: theme)
+                    .tag(theme)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        deleteThemeSwipeActionButton(for: theme)
+                        editThemeSwipeActionButton(for: theme)
+                    }
             }
         }
+        .navigationTitle("Themes")
+        .toolbar {
+            newThemeButton
+        }
     }
-    
+
     private func menuContent(for theme: EmojiTheme) -> some View {
         HStack {
             Image(systemName: theme.icon)
@@ -64,6 +81,8 @@ struct EmojiThemeChooser: View {
             .padding()
         }
     }
+    
+    // MARK: - Game
     
     @ViewBuilder
     private func gameView(for themeId: EmojiTheme.ID) -> some View {
