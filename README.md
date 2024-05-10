@@ -63,3 +63,28 @@ A few of the important concepts that I learned in this segment of the course:
 - Can use `.onDelete` modifier on a `ForEach` to add swipe to delete behavior, but can't do it on the `List` directly, the `ForEach` must be inside the `List`
 - Similarly, `.onMove` is used to allow you to drag to change the order of items in the `List`, but must be in the `ForEach`
 - To obtain a binding to an object that exists in a store, often you need to first find the index of that object in the store, then put `$` in front of the store itself and index into that object
+- `UIColor` is used to manipulate colors, such as different color spaces (RGB vs HSV, etc), and ways of encoding it, where `Color` is intended to be its representation in SwiftUI
+- `UIImage` is used to store and manipulate the image data (JPEG or GIF, etc), `Image` is its representation in SwiftUI
+- `actor` type is like a class in that it is a reference class, but synchronizes access to its vars and funcs
+- Only one of the `actor`'s funcs or computed vars can be running at any given time, ensuring no conflicts over the `actor`'s data
+- Putting `async` in front of its function marks it as one that may be suspended, it "could" suspend but it does not mean that it "will" suspend
+- When you call an `async` function you must mark it with `await`, this is intended as a reminder to the author that the `async` function might not complete ahead of subsequent steps
+- Closures can only take an `async` function if its argument is marked with `async`, such as `task(async () -> Void)` (starts task immediately when view lifetime begins) or `refreshable(async () -> Void)` (refreshes on swipe down)
+- All `View` functions and computed vars run automatically on the main actor, but your view model does not, unless you mark funcs with `@MainActor`, or mark your entire view model
+  - Fix for "Publishing changes from background thread ..." purple errors
+- Functions that can throw an error are marked `throws` and are called with `try`, which is a similar pattern to `async` and `await`
+- Error handling pattern:
+```swift
+do {
+    try codeThatThrows()
+} catch MyErrorEnum.specificError {
+    /* Handle specific error */
+} catch let myError where myError is MyErrorEnum {
+    /* Handle an error I defined, but not a specific one */
+} catch {
+    /* Handle any other error */
+}
+codeThatExecutesAfter()
+```
+- Above, the `is` keyword checked whether the error was a certain type
+- If you only have one button in an alert, its good to make it `role: .cancel`
