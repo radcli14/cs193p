@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct EmojiArtDocumentView: View {
+    @Environment(\.undoManager) var undoManager
+    
+    @StateObject var paletteStore = PaletteStore(named: "Shared")
+    
     typealias Emoji = EmojiArt.Emoji
     
     @ObservedObject var document: EmojiArtDocument
@@ -20,6 +24,10 @@ struct EmojiArtDocumentView: View {
                 .padding(.horizontal)
                 .scrollIndicators(.hidden)
         }
+        .toolbar {
+            UndoButton()
+        }
+        .environmentObject(paletteStore)
     }
     
     private var documentBody: some View {
@@ -101,7 +109,7 @@ struct EmojiArtDocumentView: View {
                     .stroke(emoji.isSelected(in: document) ? Color.green : Color.clear,
                             lineWidth: Constants.selectedEmojiLineWidth)
             }
-            .emojiContextMenu(onDeleteAction: { document.delete(emoji) })
+            .emojiContextMenu(onDeleteAction: { document.delete(emoji, undoWith: undoManager) })
             .font(emoji.font)
             .scaleEffect(emoji.isSelected(in: document) ? gestureZoom : 1)
             .position(positionDuringPan(for: emoji).in(geometry))
@@ -129,7 +137,7 @@ struct EmojiArtDocumentView: View {
             .onEnded { endingPinchScale in
                 backgroundZoom *= document.zeroEmojisAreSelected ? endingPinchScale : 1
                 for id in document.selectedEmojis {
-                    document.resize(emojiWithId: id, by: endingPinchScale)
+                    document.resize(emojiWithId: id, by: endingPinchScale, undoWith: undoManager)
                 }
             }
     }
@@ -145,7 +153,8 @@ struct EmojiArtDocumentView: View {
                     document.move(
                         emojiWithId: id,
                         by: endingDragGestureValue.translation,
-                        multiplier: 1/backgroundZoom
+                        multiplier: 1/backgroundZoom,
+                        undoWith: undoManager
                     )
                 }
             }
@@ -179,7 +188,8 @@ struct EmojiArtDocumentView: View {
                 document.move(
                     emojiWithId: emojiId,
                     by: endingDragGestureValue.translation,
-                    multiplier: 1/backgroundZoom
+                    multiplier: 1/backgroundZoom,
+                    undoWith: undoManager
                 )
             }
     }
@@ -189,13 +199,14 @@ struct EmojiArtDocumentView: View {
             switch sturldata {
             case .url(let url):
                 print("url = \(url)")
-                document.setBackground(url)
+                document.setBackground(url, undoWith: undoManager)
                 return true
             case .string(let emoji):
                 document.addEmoji(
                     emoji,
                     at: emojiPosition(at: location, in: geometry),
-                    size: Constants.paletteEmojiSize / backgroundZoom
+                    size: Constants.paletteEmojiSize / backgroundZoom,
+                    undoWith: undoManager
                 )
                 return true
             default:
