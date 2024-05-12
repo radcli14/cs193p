@@ -26,31 +26,69 @@ struct EmojiArtDocumentView: View {
         GeometryReader { geometry in
             ZStack {
                 Color.white
+                if document.background.isFetching {
+                    ProgressView()
+                        .scaleEffect(2)
+                        .tint(.blue)
+                        .position(Emoji.Position.zero.in(geometry))
+                }
                 documentContents(in: geometry)
                     .scaleEffect(backgroundZoom * (document.zeroEmojisAreSelected ? gestureZoom : 1))
-                    .offset(backGroundPan + (documentShouldPan ? gesturePan.pan : .zero))
+                    .offset(backgroundPan + (documentShouldPan ? gesturePan.pan : .zero))
             }
             .gesture(panGesture.simultaneously(with: zoomGesture).simultaneously(with: tapOnBackgroundGesture))
+            .onTapGesture(count: 2) {
+                zoomToFit(document.bbox, in: geometry)
+            }
             .dropDestination(for: Sturldata.self) { sturldatas, location in
                 return drop(sturldatas, at: location, in: geometry)
+            }
+            .onChange(of: document.background.failureReason) {
+                showBackgroundFailureAlert = document.background.failureReason != nil
+            }
+            .onChange(of: document.background.uiImage) {
+                zoomToFit(document.background.uiImage?.size, in: geometry)
+            }
+            .alert(
+                "Set Background",
+                isPresented: $showBackgroundFailureAlert,
+                presenting: document.background.failureReason,
+                actions: { reason in
+                    Button("OK", role: .cancel) { }
+                },
+                message: { reason in
+                    Text(reason)
+                }
+            )
+        }
+    }
+    
+    private func zoomToFit(_ size: CGSize?, in geometry: GeometryProxy) {
+        if let size {
+            zoomToFit(CGRect(center: .zero, size: size), in: geometry)
+        }
+    }
+    
+    private func zoomToFit(_ rect: CGRect, in geometry: GeometryProxy) {
+        withAnimation {
+            if rect.size.width > 0, rect.size.height > 0, geometry.size.width > 0, geometry.size.height > 0 {
+                let hZoom = geometry.size.width / rect.size.width
+                let vZoom = geometry.size.height / rect.size.height
+                backgroundZoom = min(hZoom, vZoom)
+                backgroundPan = CGOffset(width: -rect.midX * backgroundZoom, height: -rect.midY * backgroundZoom)
             }
         }
     }
     
+    @State private var showBackgroundFailureAlert = false
+    
     @ViewBuilder
     private func documentContents(in geometry: GeometryProxy) -> some View {
-        AsyncImage(url: document.background) { phase in
-            if let image = phase.image {
-                image
-            } else if let url = document.background {
-                if phase.error != nil {
-                    Text("\(url)")
-                } else {
-                    ProgressView()
-                }
-            }
+        if let uiImage = document.background.uiImage {
+            Image(uiImage: uiImage)
+                .position(Emoji.Position.zero.in(geometry))
         }
-            .position(Emoji.Position.zero.in(geometry))
+            
         ForEach(document.emojis) { emoji in
             emojiView(for: emoji, in: geometry)
         }
@@ -73,7 +111,7 @@ struct EmojiArtDocumentView: View {
     // MARK: - Gestures
     
     @State private var backgroundZoom: CGFloat = 1
-    @State private var backGroundPan: CGOffset = .zero
+    @State private var backgroundPan: CGOffset = .zero
     
     @GestureState private var gestureZoom: CGFloat = 1
     @GestureState private var gesturePan: GesturePanState = GesturePanState()
@@ -102,7 +140,7 @@ struct EmojiArtDocumentView: View {
                 gesturePan = GesturePanState(pan: inMotionDragGestureValue.translation)
             }
             .onEnded { endingDragGestureValue in
-                backGroundPan += document.zeroEmojisAreSelected ? endingDragGestureValue.translation : .zero
+                backgroundPan += document.zeroEmojisAreSelected ? endingDragGestureValue.translation : .zero
                 for id in document.selectedEmojis {
                     document.move(
                         emojiWithId: id,
@@ -170,8 +208,8 @@ struct EmojiArtDocumentView: View {
     private func emojiPosition(at location: CGPoint, in geometry: GeometryProxy) -> Emoji.Position {
         let center = geometry.frame(in: .local).center
         return Emoji.Position(
-            x: Int((location.x - center.x - backGroundPan.width) / backgroundZoom),
-            y: Int(-(location.y - center.y - backGroundPan.height) / backgroundZoom)
+            x: Int((location.x - center.x - backgroundPan.width) / backgroundZoom),
+            y: Int(-(location.y - center.y - backgroundPan.height) / backgroundZoom)
         )
     }
     
