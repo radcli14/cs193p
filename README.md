@@ -88,3 +88,45 @@ codeThatExecutesAfter()
 ```
 - Above, the `is` keyword checked whether the error was a certain type
 - If you only have one button in an alert, its good to make it `role: .cancel`
+- `App` includes a body that implements `Scene`, which will generally be a `WindowGroup` or `DocumentGroup`
+- In a `DocumentGroup` the `newDocument` argument provides a function to create a new, blank view model, which will then become the `config.document` for the closure with `{ config in ... }`
+  - For this to work, view model must conform to `ReferenceFileDocument` and must implement `Undo`
+  - Inherits `ObservableObject`
+  - Writes to a background thread via a `snapshot` method
+- `FileDocument` protocol gets or puts contents from a document from or to a file
+  - Uses `FileWrapper` type and `fileWrapper` method to write to a file
+  - Similar to `ReferenceFileDocument` but without the `snapshot`
+- `UTType` for "Uniform Type Identifier" expresses what types of files can be opened and edited
+  - Must `import UniformTypeIdentifiers` 
+  - If we have a custom document, we invent a unique one, using reverse DNS notation, e.g. `edu.stanford.cs193p.emojiart`
+  - Describe the custom identifier(S) in project settings under the "Info" tab, with an entry under "Exported Type Identifiers"
+  - Can create a quick look for a document thumbnail, but takes some work
+  - Need to set `Supports Document Browser` to "Yes" in the Info
+  - Must specify our custom types in the code
+```swift
+extension UTType {
+  static let emojiart = UTType(exportedAs: "edu.stanford.cs193p.emojiart")
+}
+```
+  - In our `ReferenceFileDoucment`, we correspondingly need
+```swift
+static var readableContentTypes: [UTType] { [UTType.emojiart] }
+static var writeableContentTypes: [UTType] { [UTType.emojiart] }
+```
+- `Undo` is usually implemented in a view model with an intent function, but we have to provide the `UndoManager` which is usually in the view with `@Environment(\.undoManager) var undoManager`
+  - Function in `UndoManager` is `func registerUndo(withTarget: self, howToUndo: (target) -> Void)`
+  - Can wrap any action that changes our model with an `undoablyPerform` method that saves our snapshot, looks like this:
+```swift
+func undoablyPerform(with undoManager: UndoManager?, doit: () -> Void) {
+  let oldModel = model
+  doit()
+  undManager?.registerUndo(withTarget: self) { myself in
+    myself.model = oldModel
+  }
+}
+``` 
+  - Use the `setActionName` in `undoManager` so that in the edit menu will provide a description of what is being undone
+- `Notification` interface is generally regarded as an old way of communicating change throughout the app, currently using the `@Environment` and `EnvironmentValues` is regarded as best practice
+- You can provide only a 1024x1024 icon now without having to scale down to all the other sizes
+- Built in fonts (like, body, title, etc) will automatically scale if the user changes their font sizes in settings
+  -  Can precede a font size with `@ScaledMetric` to make it change with user settings, for example `@ScaledMetric var paletteEmojiSize: CGFloat = 40`
