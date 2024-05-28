@@ -29,6 +29,8 @@ A few of the important concepts that I learned in this segment of the course:
 
 ## Emoji Art
 
+![Emoji Art on iPad](images/emojiArtOnIpad.png)
+
 A few of the important concepts that I learned in this segment of the course:
 - Using back quotes around a reserved keyword when I want to use it anyway, for example, extending `Emoji.Position` with a function `.in`
 - Using `Self` in a static let of a struct to create an instance of its own type
